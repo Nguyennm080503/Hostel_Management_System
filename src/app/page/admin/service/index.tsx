@@ -26,9 +26,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../../components/ui/tooltip";
+import CreateMeasurementComponent from "../../../components/card/MeasurementCreateCard";
+import MeasurementCardComponent from "../../../components/card/MeasurementCard";
 
 const ServicePage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogMeasurementOpen, setIsDialogeasurementOpen] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
   const validate = ErrorMessageCreateSerivce;
 
@@ -76,8 +79,9 @@ const ServicePage = () => {
     formik.handleSubmit();
   };
 
-  const handleCreateService = () => {};
-  
+  const onCallBackMeasurement = () => {
+    setIsCreate((prev) => !prev);
+  }
 
   return (
     <>
@@ -85,7 +89,7 @@ const ServicePage = () => {
         <SideBarSideResponsive />
       </div>
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-4 my-5">
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 gap-5 sm:grid-cols-1">
           <div>
             <div className="flex items-center justify-end mb-3">
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -176,12 +180,28 @@ const ServicePage = () => {
 
           <div>
             <div className="flex items-center justify-end mb-3">
-              <ButtonCustomeComponent
-                title={"Thêm đơn vị mới"}
-                onClick={handleCreateService}
-              />
+            <Dialog open={isDialogMeasurementOpen} onOpenChange={setIsDialogeasurementOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    style={{ color: "white", backgroundColor: "#078BFE" }}
+                  >
+                    Thêm đơn vị mới
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                  <DialogHeader>
+                    <DialogTitle>
+                      <div>Thêm mới đơn vị</div>
+                    </DialogTitle>
+                    <DialogDescription>
+                      <CreateMeasurementComponent onCallBack={onCallBackMeasurement}/>
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
             </div>
-            <ServiceCardComponent isload={isCreate}/>
+            <MeasurementCardComponent isload={isCreate}/>
           </div>
         </div>
       </div>

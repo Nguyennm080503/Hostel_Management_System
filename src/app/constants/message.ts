@@ -34,3 +34,17 @@ export const ErrorMessageLogin = {
       required: "Cẵn cước công dân đang trống !",
     },
   };
+
+  export const ErrorMessageCreateMeasurement = {
+    measurementName: {
+      required: "Tên đơn vị đo đang trống !",
+      length: "Tên tối đa 100 kí tự !",
+    },
+    measurementDescription: {
+      required: "Mô tả đang trống !",
+      length: "Tên tối đa 250 kí tự !",
+    },
+    measurementType: {
+      required: "Loại đơn vị đang trống !",
+    },
+  };

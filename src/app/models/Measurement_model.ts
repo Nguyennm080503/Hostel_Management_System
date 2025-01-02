@@ -4,3 +4,9 @@ export interface MeasurementData{
     measurementDescription : string
     measurementType : number
 }
+
+export interface MeasurementCreate{
+    measurementName : string
+    measurementDescription : string
+    measurementType : number
+}
