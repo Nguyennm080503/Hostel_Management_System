@@ -7,6 +7,12 @@ export const ErrorMessageLogin = {
     },
   };
 
+  export const ErrorMessageCreateSerivce = {
+    serviceName: {
+      required: "Tên dịch vụ đang trống",
+    },
+  };
+
   export const ErrorMessageCreateAccount = {
     name: {
       required: "Tên đang trống !",

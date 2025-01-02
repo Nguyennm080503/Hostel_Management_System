@@ -16,7 +16,7 @@ const ProtectedRoute = ({ allowedRoles }: Props) => {
   }
 
   if (!userInfo) {
-    return <Navigate to="/permisson" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (!allowedRoles.includes(userInfo.role)) {

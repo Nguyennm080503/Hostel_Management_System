@@ -3,7 +3,7 @@ import {
     Menu,
     Home,
     Users,
-    FileClock,
+    Wrench,
   } from "lucide-react";
   import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
   import { Button } from "../ui/button";
@@ -23,7 +23,6 @@ import {
   
     // CSS active tab dựa trên url của trang web
     const getAcitveLink = (url: string) => {
-      const urlEnd = currentUrl.pathname.slice(-5).replace("/", "");
       const activeStyle = {
         backgroundColor: "#4880FF",
         color: "white",
@@ -32,15 +31,12 @@ import {
         "mx-[-0.65rem] flex items-center gap-4 rounded-lg px-3 py-2 transition-all hover:text-white cursor-pointer";
       const inactiveClass =
         "mx-[-0.65rem] flex items-center gap-4 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary cursor-pointer";
-  
-      if (url === "") {
-        return urlEnd === "staff"
-          ? { className: activeClass, style: activeStyle }
-          : { className: inactiveClass };
+    
+      // Kiểm tra đường dẫn chính xác
+      if (currentUrl.pathname === "/admin" + url) {
+        return { className: activeClass, style: activeStyle };
       } else {
-        return currentUrl.pathname.includes(url)
-          ? { className: activeClass, style: activeStyle }
-          : { className: inactiveClass };
+        return { className: inactiveClass };
       }
     };
   
@@ -56,9 +52,9 @@ import {
         link: "/accounts",
       },
       {
-        name: "Nhật ký",
-        icon: <FileClock className="h-4 w-4" />,
-        link: "/logs",
+        name: "Dịch vụ",
+        icon: <Wrench className="h-4 w-4" />,
+        link: "/services",
       },
     ];
   

@@ -1,5 +1,5 @@
 import { AuthContext } from "../../contexts/AuthContext";
-import { Home, LogOut, FileClock, Settings, Users } from "lucide-react";
+import { Home, LogOut, Users, Wrench } from "lucide-react";
 import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const Sidebar = () => {
 
   const handleLogOut = () => {
     logout();
-    navigate("");
+    navigate("/");
   };
 
   const getAcitveLink = (url: string) => {
@@ -35,7 +35,7 @@ const Sidebar = () => {
     {
       name: "Trang chủ",
       icon: <Home className="h-4 w-4" />,
-      link: "/",
+      link: "",
     },
     {
       name: "Tài khoản",
@@ -43,9 +43,9 @@ const Sidebar = () => {
       link: "/accounts",
     },
     {
-      name: "Nhật ký",
-      icon: <FileClock className="h-4 w-4" />,
-      link: "/logs",
+      name: "Dịch vụ",
+      icon: <Wrench className="h-4 w-4" />,
+      link: "/services",
     },
   ];
 

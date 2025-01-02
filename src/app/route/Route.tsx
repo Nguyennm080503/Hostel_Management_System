@@ -14,6 +14,8 @@ const DashboardAdminPage = lazy(() => import("../page/admin/dashboard/index"))
 const UserPage = lazy(() => import("../page/admin/users/index"))
 const UserCreatePage = lazy(() => import("../page/admin/users/create/index"))
 
+const ServicePage = lazy(() => import("../page/admin/service/index"))
+
 export const router = createBrowserRouter([
   {
     path: "admin",
@@ -44,6 +46,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<></>}>
                 <UserCreatePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "services",
+            element: (
+              <Suspense fallback={<></>}>
+                <ServicePage />
               </Suspense>
             ),
           },

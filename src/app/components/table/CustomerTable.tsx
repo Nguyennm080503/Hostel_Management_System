@@ -67,8 +67,8 @@ const TableCustomerComponent = ({ filteredList, currentItems, onCallBack }: Data
     }
   }
 
-  const changeStatusAccount = (accountId : number, status : string) => {
-    fetchChangeStatusAccount(status, accountId)
+  const changeStatusAccount = async (accountId : number, status : string) => {
+    await fetchChangeStatusAccount(status, accountId)
     onCallBack()
   }
 
@@ -179,7 +179,7 @@ const TableCustomerComponent = ({ filteredList, currentItems, onCallBack }: Data
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={7} className="text-center py-4">
+            <TableCell colSpan={7} className="text-left py-4">
               Không có khách hàng cần tìm
             </TableCell>
           </TableRow>
