@@ -21,7 +21,6 @@ import { useFormik } from "formik";
 import { ErrorMessageCreateMeasurement } from "../../constants/message";
 import * as Yup from "yup";
 import { Button } from "../ui/button";
-import ComboboxGenderComponent from "../combobox/GenderCombobox";
 import { MeasurementCreate } from "../../models/Measurement_model";
 import Measurement from "../../api/measurement/Measurement";
 import ComboboxTypeMeasurementComponent from "../combobox/TypeMeasurementCombobox";
@@ -63,7 +62,7 @@ const CreateMeasurementComponent = ({ onCallBack }: DataProps) => {
           values.measurementDescription !== undefined &&
           values.measurementType !== undefined
         ) {
-          const response = await Measurement.createMeasurements(updatedValues);
+          await Measurement.createMeasurements(updatedValues);
           customToast({
             icon: <SuccessIcon />,
             description: "Tạo đơn vị đo thành công",
@@ -158,7 +157,7 @@ const CreateMeasurementComponent = ({ onCallBack }: DataProps) => {
                   </div>
 
                   <div>
-                    <Label htmlFor="gender">
+                    <Label htmlFor="measurementType">
                       Loại đơn vị <span className="text-red-600">*</span>
                     </Label>
                     <br />

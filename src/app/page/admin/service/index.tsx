@@ -192,7 +192,7 @@ const ServicePage = () => {
                 <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
                   <DialogHeader>
                     <DialogTitle>
-                      <div>Thêm mới đơn vị</div>
+                      <div className="uppercase font-bold">Thêm mới đơn vị</div>
                     </DialogTitle>
                     <DialogDescription>
                       <CreateMeasurementComponent onCallBack={onCallBackMeasurement}/>

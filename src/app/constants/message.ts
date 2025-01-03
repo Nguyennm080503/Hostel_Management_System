@@ -48,3 +48,39 @@ export const ErrorMessageLogin = {
       required: "Loại đơn vị đang trống !",
     },
   };
+
+  export const ErrorMessageCreateHostel = {
+    hostelName: {
+      required: "Tên nhà đang trống !",
+    },
+    hostelAddress: {
+      required: "Địa chỉ nhà đang trống !",
+    },
+    hostelType: {
+      required: "Loại nhà đang trống !",
+    },
+    hostelRooms: {
+      required: "Số phòng đang trống !",
+    }
+  };
+
+  export const ErrorMessageCreateRoom = {
+    roomName: {
+      required: "Tên phòng đang trống !",
+    },
+    capacity: {
+      required: "Số lượng người ở đang trống !",
+    },
+    lenght: {
+      required: "Độ dài phòng đang trống !",
+    },
+    width: {
+      required: "Độ rộng phòng đang trống !",
+    },
+    roomFee : {
+      required: "Giá phòng đang trống !",
+    },
+    area : {
+      required: "Diện tích phòng đang trống !",
+    }
+  };
