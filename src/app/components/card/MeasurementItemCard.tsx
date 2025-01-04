@@ -71,7 +71,7 @@ const MeasurementItemCardComponent = ({ data, onCallBack }: DataProps) => {
   return (
     <div
       key={data.measurementID}
-      className={`flex flex-row bg-white shadow-md rounded-lg p-4 border-blue-500 border-2 space-x-6 items-center`}
+      className={`flex flex-row bg-white shadow-md rounded-lg p-4 border-blue-500 border-2 space-x-6 items-center mb-5`}
     >
       <div className="flex-grow">
         <div className="grid grid-cols-2">

@@ -64,6 +64,15 @@ export const ErrorMessageLogin = {
     }
   };
 
+  export const ErrorMessageCreateSerivceHiring = {
+    serviceHostelName: {
+      required: "Tên dịch vụ đang trống !",
+    },
+    serviceHostelPrice: {
+      required: "Giá dịch vụ đang trống !",
+    },
+  };
+
   export const ErrorMessageCreateRoom = {
     roomName: {
       required: "Tên phòng đang trống !",

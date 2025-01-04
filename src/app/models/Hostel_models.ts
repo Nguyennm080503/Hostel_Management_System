@@ -13,3 +13,9 @@ export interface HostelCreate{
     hostelAddress : string
     hostelRooms : number
 }
+
+export interface HostelUpdate{
+    hostelID : number
+    hostelName : string
+    hostelAddress : string
+}

@@ -16,8 +16,10 @@ import TableCustomerComponent from "../table/CustomerTable";
 
 const UserCardComponent = ({
   searchParams,
+  loadData
 }: {
   searchParams: SearchParam | null;
+  loadData? : boolean 
 }) => {
   const [customersList, setCustomersList] = useState<UserInformation[]>([]);
   const [filteredCustomerList, setFilteredCustomerList] = useState<
@@ -29,7 +31,7 @@ const UserCardComponent = ({
 
   useEffect(() => {
     getUsers();
-  }, []);
+  }, [loadData]);
 
   useEffect(() => {
     if (searchParams) {

@@ -3,7 +3,6 @@ import { Suspense, lazy } from "react";
 import LoginLayout from "../page/login/LoginLayout";
 import MainAdminLayout from "../page/admin/MainAdminLayout";
 import roles from "../constants/Role";
-import DashboardCustomerPage from "../page/customer/dashboard";
 
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 const LoginPage = lazy(() => import("../page/login/index"));
@@ -18,8 +17,11 @@ const UserCreatePage = lazy(() => import("../page/admin/users/create/index"))
 const ServicePage = lazy(() => import("../page/admin/service/index"))
 
 //customer
+const DashboardCustomerPage = lazy(() => import("../page/customer/dashboard/index"))
 const HostelPage = lazy(() => import("../page/customer/hostel/index"))
 const RoomPage = lazy(() => import("../page/customer/hostel/room/index"))
+const RoomDetailPage = lazy(() => import("../page/customer/hostel/room/detail/index"))
+const ServiceCustomerPage = lazy(() => import("../page/customer/service/index"))
 
 export const router = createBrowserRouter([
   {
@@ -99,10 +101,18 @@ export const router = createBrowserRouter([
             ),
           },
           {
+            path: "hostels/:hostelId/rooms/:roomId/room",
+            element: (
+              <Suspense fallback={<></>}>
+                <RoomDetailPage />
+              </Suspense>
+            ),
+          },
+          {
             path: "services",
             element: (
               <Suspense fallback={<></>}>
-                <ServicePage />
+                <ServiceCustomerPage />
               </Suspense>
             ),
           },

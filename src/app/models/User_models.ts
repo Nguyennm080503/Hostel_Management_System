@@ -34,3 +34,7 @@ export interface AccountCreate {
     address: string
     citizenCard: string
 }
+
+export interface AccountNumber{
+    number : number
+}

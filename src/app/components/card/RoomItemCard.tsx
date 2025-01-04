@@ -1,4 +1,4 @@
-import { Home } from "lucide-react";
+import { DoorClosed } from "lucide-react";
 import StatusComponent from "../status/StatusComponent";
 import { useNavigate } from "react-router-dom";
 import { RoomData } from "../../models/Room_models";
@@ -9,22 +9,23 @@ interface DataProps {
   data: RoomData;
 }
 const RoomItemCardComponent = ({ data }: DataProps) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const handleNavHostelRoom = (hostelId : number) => {
-  //   navigate(`/customer/hostels/${hostelId}/rooms`);
-  // };
+  const handleNavRoomDetail = (roomId: number) => {
+    console.log(roomId)
+    navigate(`/customer/hostels/${data.hostelID}/rooms/${roomId}/room`);
+  };
 
   return (
     <div
       key={data.roomID}
       className={`flex flex-row bg-white shadow-md rounded-lg p-4 border-gray-300 border-2 space-x-6 items-center cursor-pointer transition-transform transform hover:scale-105 hover:shadow-xl`}
-      //   onClick={() => handleNavHostelRoom(data.hostelID)}
+      onClick={() => handleNavRoomDetail(data.roomID)}
     >
       <div className="flex-grow">
         <div className="">
           <div className="flex justify-center relative">
-            <Home className="w-40 h-40" />
+            <DoorClosed className="w-40 h-40" />
             <div className="absolute bottom-0 left-1/2">
               {roomstatus.map(
                 (status) =>
@@ -43,7 +44,7 @@ const RoomItemCardComponent = ({ data }: DataProps) => {
           </h3>
           <div>
             <span>Giá thuê phòng : </span>
-            {MoneyFormat(data.roomFee)}/phòng
+            {MoneyFormat(data.roomFee)}/tháng
           </div>
         </div>
         <div className="flex justify-between">

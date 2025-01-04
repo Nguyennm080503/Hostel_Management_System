@@ -62,7 +62,7 @@ const ServiceCardComponent = ({ isload }: DataProps) => {
         <Loading />
       ) : (
         <div className="grid flex-1 items-start gap-4 px-4 sm:px-0 sm:py-0">
-          <Card className="shadow-lg grid gap-4 p-4 sm:px-2 sm:py-2 md:gap-6 lg:gap-8">
+          <Card className="shadow-lg grid gap-4 p-4 sm:px-2 sm:py-2 md:gap-6 lg:gap-8 md:h-[650px]">
             <CardHeader className="flex justify-between">
               <CardTitle className="text-gray-700 font-semibold uppercase">
                 Danh sách dịch vụ của hệ thống

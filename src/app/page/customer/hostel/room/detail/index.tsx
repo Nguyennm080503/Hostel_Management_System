@@ -1,37 +1,33 @@
 import { useEffect, useState } from "react";
-import RenderPagination from "../../../../components/pagination/Pagination";
-import SideBarSideResponsive from "../../../../components/sidebar/SidebarRespo";
-import { HostelData } from "../../../../models/Hostel_models";
-import customToast from "../../../../utils/CustomToast";
-import { WarningIcon } from "../../../../components/toast/ToastIcon";
-import Loading from "../../../../components/loading/Loading";
-import Empty from "../../../../../Empty";
+import RenderPagination from "../../../../../components/pagination/Pagination";
+import SideBarSideResponsive from "../../../../../components/sidebar/SidebarRespo";
+import { HostelData } from "../../../../../models/Hostel_models";
+import customToast from "../../../../../utils/CustomToast";
+import { WarningIcon } from "../../../../../components/toast/ToastIcon";
+import Loading from "../../../../../components/loading/Loading";
+import Empty from "../../../../../../Empty";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../../../../components/ui/dialog";
-import { Button } from "../../../../components/ui/button";
+} from "../../../../../components/ui/dialog";
+import { Button } from "../../../../../components/ui/button";
 import { ArrowLeft, DoorClosed } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import Room from "../../../../api/room/Room";
-import { RoomData } from "../../../../models/Room_models";
-import RoomItemCardComponent from "../../../../components/card/RoomItemCard";
-import HostelDetailCardComponent from "../../../../components/card/HostelDetailCard";
-import CreateRoomComponent from "../../../../components/card/RoomCreateCard";
+import Room from "../../../../../api/room/Room";
+import { RoomData } from "../../../../../models/Room_models";
+import RoomDetailCardComponent from "../../../../../components/card/RoomDetailCard";
 
-const RoomCustomerPage = () => {
-  const [roomsList, setRoomsList] = useState<RoomData[]>([]);
-  const [hostel, setHostel] = useState<HostelData>();
-  const [currentItems, setCurrentItems] = useState<RoomData[]>([]);
+const RoomDetailCustomerPage = () => {
+  const [room, setRoom] = useState<RoomData>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isChange, setIsChange] = useState(false);
   const itemsPerPage = 3;
   const navigate = useNavigate();
-  const { hostelId } = useParams();
+  const { roomId } = useParams();
 
   const handleNavBack = () => {
     navigate(-1);
@@ -43,10 +39,9 @@ const RoomCustomerPage = () => {
   const getRooms = async () => {
     setIsLoading(true);
     try {
-      if (hostelId) {
-        const response = await Room.getRoom(Number(hostelId));
-        setRoomsList(response.rooms || []);
-        setHostel(response.hostel);
+      if (roomId) {
+        const response = await Room.getRoomDetail(Number(roomId));
+        setRoom(response);
       }
     } catch (error) {
       customToast({
@@ -59,10 +54,6 @@ const RoomCustomerPage = () => {
         setIsLoading(false);
       }, 1000);
     }
-  };
-
-  const handlePageClick = (items: RoomData[]) => {
-    setCurrentItems(items);
   };
 
   const onCallBackRoom = () => {
@@ -79,9 +70,14 @@ const RoomCustomerPage = () => {
       </div>
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 my-5">
         <ArrowLeft onClick={handleNavBack} className="cursor-pointer" />
-        <HostelDetailCardComponent data={hostel} availableRoom={roomsList.length} emptyRoom={roomsList.filter((value) => value.status !== "Hiring").length} onCallback={() => setIsChange((prev) => !prev)}/>
+        <RoomDetailCardComponent
+          data={room}
+          availableRoom={room?.capacity || 0}
+          emptyRoom={room?.capacity || 0}
+          onCallback={() => setIsChange((prev) => !prev)}
+        />
         <h2 className="uppercase font-bold text-lg">
-          Danh sách các phòng của nhà
+          Danh sách các thành viên thuê phòng
         </h2>
         <div className="flex items-center justify-end">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -89,18 +85,10 @@ const RoomCustomerPage = () => {
               variant="outline"
               style={{ color: "white", backgroundColor: "#078BFE" }}
               onClick={() => {
-                if (hostel?.hostelRooms === roomsList.length) {
-                  customToast({
-                    icon: <WarningIcon />,
-                    description: "Số phòng của nhà đã đủ, không thể tạo thêm!",
-                    duration: 3000,
-                  });
-                } else {
-                  setIsDialogOpen(true);
-                }
+                setIsDialogOpen(true);
               }}
             >
-              Thêm phòng mới
+              Thêm thành viên
             </Button>
             {isDialogOpen && (
               <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
@@ -110,21 +98,21 @@ const RoomCustomerPage = () => {
                       <span className="mr-2">
                         <DoorClosed />
                       </span>
-                      Thêm phòng mới
+                      Thêm thành viên mới
                     </div>
                   </DialogTitle>
                   <DialogDescription>
-                    <CreateRoomComponent
+                    {/* <CreateRoomComponent
                       hostelId={hostel?.hostelID}
                       onCallBack={onCallBackRoom}
-                    />
+                    /> */}
                   </DialogDescription>
                 </DialogHeader>
               </DialogContent>
             )}
           </Dialog>
         </div>
-        {roomsList.length > 0 ? (
+        {/* {roomsList.length > 0 ? (
           <>
             <div className="grid md:grid-cols-3 gap-5 sm:grid-cols-1">
               {currentItems.map((value) => (
@@ -143,10 +131,10 @@ const RoomCustomerPage = () => {
           <div className="md:h-[300px] flex items-center justify-center">
             <Empty />
           </div>
-        )}
+        )} */}
       </div>
     </>
   );
 };
 
-export default RoomCustomerPage;
+export default RoomDetailCustomerPage;

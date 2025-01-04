@@ -20,3 +20,10 @@ export interface RoomCreate{
     roomFee : number
     area : number
 }
+
+export interface RoomUpdate{
+    roomID : number
+    roomName : string
+    capacity : number
+    roomFee : number
+}

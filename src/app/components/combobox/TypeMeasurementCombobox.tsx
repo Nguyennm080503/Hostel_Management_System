@@ -19,6 +19,10 @@ const measurementType = [
   {
     value: "3",
     label: "Tính theo phòng",
+  },
+  {
+    value: "4",
+    label: "Tính theo lần",
   }
 ]
 

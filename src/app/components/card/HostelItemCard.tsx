@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { HostelData } from "../../models/Hostel_models";
 import { Home } from "lucide-react";
 import { hostelstatus } from "../../constants/status/hostelStatus";

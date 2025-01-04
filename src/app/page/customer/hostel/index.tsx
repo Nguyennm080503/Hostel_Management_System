@@ -11,6 +11,7 @@ import Empty from "../../../../Empty";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog";
 import { Button } from "../../../components/ui/button";
 import CreateHostelComponent from "../../../components/card/HostelCreateCard";
+import { Home } from "lucide-react";
 
 const HostelCustomerPage = () => {
   const [hostelsList, setHostelsList] = useState<HostelData[]>([]);
@@ -60,7 +61,7 @@ const HostelCustomerPage = () => {
       </div>
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 my-5">
         <h2 className="uppercase font-bold text-lg">Danh sách các phòng trọ nhà nghỉ của bạn</h2>
-        <div className="flex items-center justify-end mb-3">
+        <div className="flex items-center justify-end">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button
@@ -73,7 +74,7 @@ const HostelCustomerPage = () => {
                 <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
                   <DialogHeader>
                     <DialogTitle>
-                      <div className="uppercase font-bold">Thêm nhà mới</div>
+                      <div className="uppercase font-bold flex items-center"><span className="mr-2"><Home/></span>Thêm nhà mới</div>
                     </DialogTitle>
                     <DialogDescription>
                       <CreateHostelComponent onCallBack={onCallBackHostel}/>
