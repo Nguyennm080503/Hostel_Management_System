@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-import RenderPagination from "../../../../../components/pagination/Pagination";
 import SideBarSideResponsive from "../../../../../components/sidebar/SidebarRespo";
-import { HostelData } from "../../../../../models/Hostel_models";
 import customToast from "../../../../../utils/CustomToast";
 import { WarningIcon } from "../../../../../components/toast/ToastIcon";
 import Loading from "../../../../../components/loading/Loading";
-import Empty from "../../../../../../Empty";
 import {
   Dialog,
   DialogContent,
@@ -19,15 +16,28 @@ import { useNavigate, useParams } from "react-router-dom";
 import Room from "../../../../../api/room/Room";
 import { RoomData } from "../../../../../models/Room_models";
 import RoomDetailCardComponent from "../../../../../components/card/RoomDetailCard";
+import HiringHostel from "../../../../../api/hiring/HiringHostel";
+import {
+  HiringInformationData,
+  MemberData,
+} from "../../../../../models/Hiring_models";
+import HiringInformationCardComponent from "../../../../../components/card/HiringInformationCard";
+import MemberItemCardComponent from "../../../../../components/card/MemberItemCard";
+import RenderPagination from "../../../../../components/pagination/Pagination";
+import Empty from "../../../../../../Empty";
+import CreateMemberComponent from "../../../../../components/card/CreateMemberCard";
 
 const RoomDetailCustomerPage = () => {
   const [room, setRoom] = useState<RoomData>();
+  const [hiring, setHiring] = useState<HiringInformationData>();
+  const [members, setMember] = useState<MemberData[]>([]);
+  const [currentItems, setCurrentItems] = useState<MemberData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isChange, setIsChange] = useState(false);
-  const itemsPerPage = 3;
   const navigate = useNavigate();
   const { roomId } = useParams();
+  const itemsPerPage = 3;
 
   const handleNavBack = () => {
     navigate(-1);
@@ -41,7 +51,10 @@ const RoomDetailCustomerPage = () => {
     try {
       if (roomId) {
         const response = await Room.getRoomDetail(Number(roomId));
+        const response2 = await HiringHostel.getHiringCurrent(Number(roomId));
         setRoom(response);
+        setHiring(response2);
+        setMember(response2.members);
       }
     } catch (error) {
       customToast({
@@ -61,6 +74,10 @@ const RoomDetailCustomerPage = () => {
     setIsChange((prev) => !prev);
   };
 
+  const handlePageClick = (items: MemberData[]) => {
+    setCurrentItems(items);
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -72,66 +89,82 @@ const RoomDetailCustomerPage = () => {
         <ArrowLeft onClick={handleNavBack} className="cursor-pointer" />
         <RoomDetailCardComponent
           data={room}
-          availableRoom={room?.capacity || 0}
-          emptyRoom={room?.capacity || 0}
+          availablePeople={room?.capacity || 0}
+          activePeople={hiring?.members.length || 0}
           onCallback={() => setIsChange((prev) => !prev)}
         />
-        <h2 className="uppercase font-bold text-lg">
-          Danh sách các thành viên thuê phòng
-        </h2>
-        <div className="flex items-center justify-end">
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <Button
-              variant="outline"
-              style={{ color: "white", backgroundColor: "#078BFE" }}
-              onClick={() => {
-                setIsDialogOpen(true);
-              }}
-            >
-              Thêm thành viên
-            </Button>
-            {isDialogOpen && (
-              <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                <DialogHeader>
-                  <DialogTitle>
-                    <div className="uppercase font-bold flex items-center">
-                      <span className="mr-2">
-                        <DoorClosed />
-                      </span>
-                      Thêm thành viên mới
-                    </div>
-                  </DialogTitle>
-                  <DialogDescription>
-                    {/* <CreateRoomComponent
-                      hostelId={hostel?.hostelID}
-                      onCallBack={onCallBackRoom}
-                    /> */}
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            )}
-          </Dialog>
-        </div>
-        {/* {roomsList.length > 0 ? (
+
+        {room?.status === "Hiring" && (
           <>
-            <div className="grid md:grid-cols-3 gap-5 sm:grid-cols-1">
-              {currentItems.map((value) => (
-                <RoomItemCardComponent data={value} />
-              ))}
+            <div className="flex justify-between">
+              <h2 className="flex uppercase font-bold text-lg">
+                Thông tin thuê
+              </h2>
+              <div className="flex items-center justify-end">
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <Button
+                    variant="outline"
+                    style={{ color: "white", backgroundColor: "#078BFE" }}
+                    onClick={() => {
+                      setIsDialogOpen(true);
+                    }}
+                  >
+                    Thêm thành viên
+                  </Button>
+                  {isDialogOpen && (
+                    <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                      <DialogHeader>
+                        <DialogTitle>
+                          <div className="uppercase font-bold flex items-center">
+                            <span className="mr-2">
+                              <DoorClosed />
+                            </span>
+                            Thêm thành viên mới
+                          </div>
+                        </DialogTitle>
+                        <DialogDescription>
+                          <CreateMemberComponent
+                            hiringId={
+                              hiring?.hiringInformation.hiringRoomHostelID
+                            }
+                            onCallBack={onCallBackRoom}
+                          />
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  )}
+                </Dialog>
+              </div>
             </div>
-            <div className="flex justify-center">
-              <RenderPagination
-                itemsPerPage={itemsPerPage}
-                items={roomsList}
-                onPageChange={handlePageClick}
+            <div className="grid grid-cols-2 gap-8">
+              <HiringInformationCardComponent
+                data={hiring?.hiringInformation}
               />
+              <div>
+                {members.length > 0 ? (
+                  <>
+                    <div className="grid md:grid-rows-3 gap-5">
+                      {currentItems.map((value) => (
+                        <MemberItemCardComponent data={value} />
+                      ))}
+                    </div>
+                    <div className="flex justify-center mt-3">
+                      <RenderPagination
+                        itemsPerPage={itemsPerPage}
+                        items={members}
+                        onPageChange={handlePageClick}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div className="md:h-[500px] flex items-center justify-center">
+                    <Empty />
+                  </div>
+                )}
+              </div>
             </div>
           </>
-        ) : (
-          <div className="md:h-[300px] flex items-center justify-center">
-            <Empty />
-          </div>
-        )} */}
+        )}
       </div>
     </>
   );

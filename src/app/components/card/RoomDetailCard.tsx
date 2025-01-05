@@ -1,10 +1,4 @@
-import {
-  DoorClosed,
-  Home,
-  SquarePen,
-  Trash,
-  Wrench,
-} from "lucide-react";
+import { DoorClosed, SquarePen, Trash, Wrench } from "lucide-react";
 import StatusComponent from "../status/StatusComponent";
 import { Button } from "../ui/button";
 import {
@@ -18,7 +12,6 @@ import {
 } from "../ui/dialog";
 import { useState } from "react";
 import TableServiceHostelComponent from "../table/ServiceHostelTable";
-import ServiceHostelCardComponent from "./ChooseServiceHostelCard";
 import { useNavigate } from "react-router-dom";
 import customToast from "../../utils/CustomToast";
 import { ErrorIcon, SuccessIcon } from "../toast/ToastIcon";
@@ -27,17 +20,18 @@ import { roomstatus } from "../../constants/status/roomStatus";
 import { MoneyFormat } from "../../utils/formatMoney";
 import Room from "../../api/room/Room";
 import UpdateRoomComponent from "./RoomUpdateCard";
+import CreateHiringComponent from "./HiringHostelCreateCard";
 
 interface DataProps {
   data: RoomData | undefined;
-  availableRoom: number;
-  emptyRoom: number;
+  availablePeople: number;
+  activePeople: number;
   onCallback: () => void;
 }
 const RoomDetailCardComponent = ({
   data,
-  availableRoom,
-  emptyRoom,
+  availablePeople,
+  activePeople,
   onCallback,
 }: DataProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -46,7 +40,6 @@ const RoomDetailCardComponent = ({
   const [isDialogCreateOpen, setIsDialogCreateOpen] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
   const navigative = useNavigate();
-
 
   const deleteRoom = async (roomId: number | undefined) => {
     try {
@@ -79,7 +72,7 @@ const RoomDetailCardComponent = ({
         <div className="grid grid-cols-4 gap-[60px]">
           <div className="grid col-span-1">
             <div className="flex justify-center relative">
-              <Home className="w-40 h-40" />
+              <DoorClosed className="w-40 h-40" />
               <div className="absolute bottom-0 left-1/2">
                 {roomstatus.map(
                   (status) =>
@@ -128,7 +121,7 @@ const RoomDetailCardComponent = ({
                   </div>
                   <div className="text-sm text-gray-500">
                     <span className="">Số người đang ở : </span>
-                    {availableRoom | 0} người
+                    {activePeople | 0} người
                   </div>
                 </div>
               </div>
@@ -163,7 +156,10 @@ const RoomDetailCardComponent = ({
                   </DialogContent>
                 </Dialog>
 
-                <Dialog open={isDialogCreateOpen} onOpenChange={setIsDialogCreateOpen}>
+                <Dialog
+                  open={isDialogCreateOpen}
+                  onOpenChange={setIsDialogCreateOpen}
+                >
                   <DialogTrigger asChild>
                     {data?.status !== "Hiring" ? (
                       <Button className="bg-blue-900 hover:bg-blue-300">
@@ -178,18 +174,39 @@ const RoomDetailCardComponent = ({
                   <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
                     <DialogHeader>
                       <DialogTitle>
-                        <div className="uppercase font-bold flex items-center">
-                          <span className="mr-2">
-                            <Wrench />
-                          </span>
-                          Danh sách dịch vụ
-                        </div>
+                        {data?.status !== "Hiring" ? (
+                          <div className="uppercase font-bold flex items-center">
+                            <span className="mr-2">
+                              <SquarePen />
+                            </span>
+                            Tạo yêu cầu thuê
+                          </div>
+                        ) : (
+                          <div className="uppercase font-bold flex items-center">
+                            <span className="mr-2">
+                              <SquarePen />
+                            </span>
+                            Tạo phiếu thanh toán
+                          </div>
+                        )}
                       </DialogTitle>
                       <DialogDescription>
-                        <TableServiceHostelComponent
-                          hostelId={data?.roomID}
-                          isLoad={isCreate}
-                        />
+                        {data?.status !== "Hiring" ? (
+                          <CreateHiringComponent
+                            hostelId={data?.hostelID}
+                            roomId={data?.roomID}
+                            roomFee={data?.roomFee}
+                            onCallBack={onCallback}
+                            hiringType={1}
+                          />
+                        ) : (
+                          <div className="uppercase font-bold flex items-center">
+                            <span className="mr-2">
+                              <SquarePen />
+                            </span>
+                            Tạo phiếu thanh toán
+                          </div>
+                        )}
                       </DialogDescription>
                     </DialogHeader>
                   </DialogContent>

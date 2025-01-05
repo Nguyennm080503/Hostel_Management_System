@@ -53,7 +53,7 @@ const ServiceHostelCardComponent = ({ hostelId, onCallback }: DataProps) => {
       await Service.createServiceHostel(createService);
       customToast({
         icon: <SuccessIcon />,
-        description: "Thêm dịch vụ vào nhaf thành công",
+        description: "Thêm dịch vụ vào nhà thành công",
         duration: 3000,
       });
     } catch (error : any) {

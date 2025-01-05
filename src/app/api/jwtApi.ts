@@ -61,19 +61,9 @@ jwtApi.interceptors.response.use(
     if (error.response?.status === 401) {
       console.log("Token expired");
 
-      try {
-          const config = error.config;
-          if (config) {
-            return jwtApi(config);
-          }
-         else {
-          throw new Error("Token refresh failed");
-        }
-      } catch (error) {
-        localStorage.clear();
-        router.navigate("/");
-        return Promise.reject(error);
-      }
+      localStorage.clear();
+      router.navigate("/");
+      return Promise.reject(error);
     }
 
     // Lỗi 403

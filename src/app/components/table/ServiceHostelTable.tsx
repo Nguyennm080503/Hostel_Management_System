@@ -101,7 +101,7 @@ const TableServiceHostelComponent = ({ hostelId, isLoad }: DataProps) => {
             <TableHead>No</TableHead>
             <TableHead>Dịch vụ</TableHead>
             <TableHead>Loại dịch vụ</TableHead>
-            <TableHead>Giá dịch vụ</TableHead>
+            <TableHead className="text-right">Giá dịch vụ</TableHead>
             <TableHead>
               <span className="sr-only">Actions</span>
             </TableHead>

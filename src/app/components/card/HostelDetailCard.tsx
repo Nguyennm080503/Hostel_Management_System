@@ -37,6 +37,7 @@ const HostelDetailCardComponent = ({
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
   const [isDialogUpdateOpen, setIsDialogUpdateOpen] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
+  const [isDialogCreateOpen, setIsDialogCreateOpen] = useState(false);
   const navigative = useNavigate();
 
   const getHostelType = (type: number | undefined) => {
@@ -113,7 +114,7 @@ const HostelDetailCardComponent = ({
                 {data?.hostelAddress}
               </div>
               <div className="flex justify-between">
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start gap-1">
                   <div className="text-sm text-gray-500">
                     {getHostelType(data?.hostelType)}
                   </div>
@@ -135,7 +136,7 @@ const HostelDetailCardComponent = ({
           </div>
           <div className="grid col-span-1">
             <div className="flex justify-end">
-              <div className="grid grid-rows-3 gap-5">
+              <div className="grid grid-rows-3 gap-2">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
                     <Button className="bg-blue-500 hover:bg-blue-300">
@@ -165,6 +166,30 @@ const HostelDetailCardComponent = ({
                     </DialogHeader>
                   </DialogContent>
                 </Dialog>
+                {data?.hostelType === 2 && (
+                <Dialog open={isDialogCreateOpen} onOpenChange={setIsDialogCreateOpen}>
+                  <DialogTrigger asChild>
+                      <Button className="bg-blue-900 hover:bg-blue-300">
+                        Tạo thời gian thuê
+                      </Button>
+                  </DialogTrigger>
+                  <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                    <DialogHeader>
+                      <DialogTitle>
+                        <div className="uppercase font-bold flex items-center">
+                          <span className="mr-2">
+                            <SquarePen />
+                          </span>
+                          Tạo yêu cầu thuê
+                        </div>
+                      </DialogTitle>
+                      <DialogDescription>
+                        
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+                )}
 
                 <Dialog
                   open={isDialogUpdateOpen}

@@ -93,3 +93,39 @@ export const ErrorMessageLogin = {
       required: "Diện tích phòng đang trống !",
     }
   };
+
+  export const ErrorMessageCreateHiring = {
+    accountHiringName: {
+      required: "Tên người thuê đang trống !",
+    },
+    accountHiringPhone: {
+      required: "Số điện thoại người thuê đang trống !",
+    },
+    accountHiringAddress: {
+      required: "Địa chỉ người thuê đang trống !",
+    },
+    accountHiringCitizen: {
+      required: "Số căn cước người thuê đang trống !",
+    },
+    depositAmount : {
+      required: "Giá tiền đặt cọc đang trống !",
+    },
+    hiringStart : {
+      required: "Ngày bắt đầu đang trống !",
+    }
+  };
+
+  export const ErrorMessageCreateMember = {
+    memberHiringName: {
+      required: "Tên người thuê đang trống !",
+    },
+    phone: {
+      required: "Số điện thoại người thuê đang trống !",
+    },
+    address: {
+      required: "Địa chỉ người thuê đang trống !",
+    },
+    citizenCard: {
+      required: "Số căn cước người thuê đang trống !",
+    },
+  };
