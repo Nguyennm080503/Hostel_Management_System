@@ -17,7 +17,7 @@ interface DataProps {
   data: RoomData;
   people: number;
   hiringId: number;
-  onCallBack:() => void;
+  onCallBack: () => void;
 }
 
 const CreateBillHirringComponent = ({
@@ -43,7 +43,7 @@ const CreateBillHirringComponent = ({
     note: "",
     number: 0,
     oldNumber: 0,
-    serviceRoomId: 1
+    serviceRoomId: 1,
   });
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const CreateBillHirringComponent = ({
         note: "",
         number: 0,
         oldNumber: 0,
-        serviceRoomId: 1
+        serviceRoomId: 1,
       });
     }
   }, [startDate, endDate, paymentType, data.roomFee, amountDate]);
@@ -104,14 +104,14 @@ const CreateBillHirringComponent = ({
     if (totalAmount === 0) {
       setTotalAmount(billRoom.finalAmount);
     } else {
-      let month : number = 0
-      let year : number = 0
-      if(new Date().getMonth() + 1 === 12){
+      let month: number = 0;
+      let year: number = 0;
+      if (new Date().getMonth() + 1 === 12) {
         month = 1;
-        year = new Date().getFullYear() + 1
-      }else{
-        month = new Date().getMonth() + 1
-        year = new Date().getFullYear()
+        year = new Date().getFullYear() + 1;
+      } else {
+        month = new Date().getMonth() + 1;
+        year = new Date().getFullYear();
       }
       setTotalAmount(totalAmount);
       setBillCreate({
@@ -120,7 +120,10 @@ const CreateBillHirringComponent = ({
           "Thanh toán tiền thuê tháng " +
           month +
           "/" +
-          year + "( " + data.roomName + " )",
+          year +
+          "( " +
+          data.roomName +
+          " )",
         billPaymentAmount: totalAmount,
         billPaymentType: 1,
         hiringRoomHostelID: hiringId,
