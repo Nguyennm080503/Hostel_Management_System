@@ -21,7 +21,7 @@ export const formatCurrency = (value: string) => {
         minimumFractionDigits: 0,
       });
   
-      return formattedAmount;
+      return formattedAmount.replace("₫", "").trim();
     }
     return "";
   };

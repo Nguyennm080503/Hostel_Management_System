@@ -24,7 +24,7 @@ import { Button } from "../ui/button";
 import { MoreHorizontal, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { ServiceData, ServiceHostelData } from "../../models/Service_models";
+import { ServiceHostelData } from "../../models/Service_models";
 import Service from "../../api/service/Service";
 import customToast from "../../utils/CustomToast";
 import { SuccessIcon, WarningIcon } from "../toast/ToastIcon";
@@ -32,7 +32,7 @@ import { MoneyFormat } from "../../utils/formatMoney";
 
 interface DataProps {
   hostelId: number | undefined;
-  isLoad: boolean;
+  isLoad?: boolean;
 }
 
 const TableServiceHostelComponent = ({ hostelId, isLoad }: DataProps) => {

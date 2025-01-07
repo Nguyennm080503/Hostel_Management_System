@@ -1,3 +1,7 @@
+import { HostelData } from "./Hostel_models"
+import { RoomData } from "./Room_models"
+import { ServiceRoomCreate, ServiceRoomData } from "./Service_models"
+
 export interface NewHiringHostel{
     hostelID: number
     roomID: number
@@ -9,6 +13,7 @@ export interface NewHiringHostel{
     depositAmount: number
     hiringStart: Date | null
     hiringEnd: Date | null
+    serviceRooms : ServiceRoomCreate[]
 }
 
 export interface NewMemberData{
@@ -31,6 +36,8 @@ export interface HiringHostelDetail{
     depositAmount: number
     hiringStart: string 
     hiringEnd: string
+    hostel: HostelData
+    room: RoomData
 }
 
 export interface MemberData{
@@ -44,4 +51,5 @@ export interface MemberData{
 export interface HiringInformationData{
     hiringInformation : HiringHostelDetail
     members : MemberData[]
+    serviceRooms : ServiceRoomData[]
 }

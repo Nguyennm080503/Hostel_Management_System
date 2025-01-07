@@ -6,6 +6,7 @@ import requests from "../request";
     createHiring: (value : NewHiringHostel) => requests.jwtApiPost("/api/hiring/add/hiring", value),
 
     createMember: (value : NewMemberData) => requests.jwtApiPost("/api/member/add/member", value),
+    deleteMember: (value : number) => requests.jwtApiDelete(`/api/member/delete/member?memberHiringID=${value}`)
   };
   
   export default HiringHostel;

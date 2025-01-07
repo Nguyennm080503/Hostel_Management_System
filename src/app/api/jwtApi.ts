@@ -62,7 +62,7 @@ jwtApi.interceptors.response.use(
       console.log("Token expired");
 
       localStorage.clear();
-      router.navigate("/");
+      router.navigate("");
       return Promise.reject(error);
     }
 

@@ -22,6 +22,7 @@ const HostelPage = lazy(() => import("../page/customer/hostel/index"))
 const RoomPage = lazy(() => import("../page/customer/hostel/room/index"))
 const RoomDetailPage = lazy(() => import("../page/customer/hostel/room/detail/index"))
 const ServiceCustomerPage = lazy(() => import("../page/customer/service/index"))
+const PaymentCustomerPage = lazy(() => import("../page/customer/hostel/room/detail/payment/index"))
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +106,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<></>}>
                 <RoomDetailPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "hostels/:hostelId/rooms/:roomId/room/payment/:paymentId",
+            element: (
+              <Suspense fallback={<></>}>
+                <PaymentCustomerPage />
               </Suspense>
             ),
           },

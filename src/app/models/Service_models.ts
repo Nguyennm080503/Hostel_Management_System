@@ -19,3 +19,20 @@ export interface ServiceHostelCreate{
     hostelID : number
     serviceHostelRoomID : number
 }
+
+export interface ServiceRoomCreate{
+    serviceHostelRoomID : number
+    newServiceLogIndexDto : NewServiceLogIndex
+}
+
+export interface ServiceRoomData{
+    hiringServiceID : number
+    serviceHostelRoomID : number
+    serviceRoom : ServiceHiringData
+}
+
+export interface NewServiceLogIndex{
+    serviceRoomID : number
+    serviceHostelID : number
+    serviceLog : number
+}

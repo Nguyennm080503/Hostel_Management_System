@@ -34,6 +34,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import ServiceRoomHirringCardComponent from "./ChooseServiceRoomCard";
+import { ServiceRoomCreate } from "../../models/Service_models";
 
 interface DataProps {
   hostelId: number | undefined;
@@ -50,6 +52,7 @@ const CreateHiringComponent = ({
   hiringType,
 }: DataProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedServices, setSelectedServices] = useState<ServiceRoomCreate[]>([]);
   const [period, setPeriod] = useState<number>(0);
   const validate = ErrorMessageCreateHiring;
   const validationSchema = Yup.object().shape({
@@ -83,6 +86,7 @@ const CreateHiringComponent = ({
       hiringType: hiringType,
       hiringStart: null,
       hiringEnd: null,
+      serviceRooms: []
     } as NewHiringHostel,
     validationSchema,
     onSubmit: async (values: NewHiringHostel) => {
@@ -90,6 +94,7 @@ const CreateHiringComponent = ({
       try {
         const formattedValue = {
           ...values,
+          serviceRooms: selectedServices,
           depositAmount: parseCurrencyToNumber(values.depositAmount.toString()),
           hiringEnd: dayjs(values.hiringStart).add(period, "month").toDate(),
         };
@@ -131,6 +136,10 @@ const CreateHiringComponent = ({
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     formik.handleSubmit();
+  };
+
+  const handleServiceSelection = (services: ServiceRoomCreate[]) => {
+    setSelectedServices(services); 
   };
 
   const onChangeDate = (date: any, dateString: any) => {
@@ -418,6 +427,7 @@ const CreateHiringComponent = ({
                     </TooltipProvider>
                   </div>
                 </div>
+                <ServiceRoomHirringCardComponent onCallback={handleServiceSelection}/>
               </CardContent>
               <CardFooter className="flex justify-end">
                 <Button

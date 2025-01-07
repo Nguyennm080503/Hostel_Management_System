@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "../../../../../components/ui/dialog";
 import { Button } from "../../../../../components/ui/button";
-import { ArrowLeft, DoorClosed } from "lucide-react";
+import { ArrowLeft, DoorClosed, User } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Room from "../../../../../api/room/Room";
 import { RoomData } from "../../../../../models/Room_models";
@@ -37,7 +37,7 @@ const RoomDetailCustomerPage = () => {
   const [isChange, setIsChange] = useState(false);
   const navigate = useNavigate();
   const { roomId } = useParams();
-  const itemsPerPage = 3;
+  const itemsPerPage = 2;
 
   const handleNavBack = () => {
     navigate(-1);
@@ -89,9 +89,10 @@ const RoomDetailCustomerPage = () => {
         <ArrowLeft onClick={handleNavBack} className="cursor-pointer" />
         <RoomDetailCardComponent
           data={room}
-          availablePeople={room?.capacity || 0}
           activePeople={hiring?.members.length || 0}
           onCallback={() => setIsChange((prev) => !prev)}
+          services={hiring?.serviceRooms || []}
+          hiringId = {hiring?.hiringInformation.hiringRoomHostelID || 0}
         />
 
         {room?.status === "Hiring" && (
@@ -106,10 +107,19 @@ const RoomDetailCustomerPage = () => {
                     variant="outline"
                     style={{ color: "white", backgroundColor: "#078BFE" }}
                     onClick={() => {
-                      setIsDialogOpen(true);
+                      if (room.capacity === members.length) {
+                        customToast({
+                          icon: <WarningIcon />,
+                          description:
+                            "Số thành viên trong phòng đã đủ, không thể tạo thêm!",
+                          duration: 3000,
+                        });
+                      } else {
+                        setIsDialogOpen(true);
+                      }
                     }}
                   >
-                    Thêm thành viên
+                    Thêm thành viên mới
                   </Button>
                   {isDialogOpen && (
                     <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
@@ -117,9 +127,9 @@ const RoomDetailCustomerPage = () => {
                         <DialogTitle>
                           <div className="uppercase font-bold flex items-center">
                             <span className="mr-2">
-                              <DoorClosed />
+                              <User />
                             </span>
-                            Thêm thành viên mới
+                            Thêm thành viên mới
                           </div>
                         </DialogTitle>
                         <DialogDescription>
@@ -136,16 +146,22 @@ const RoomDetailCustomerPage = () => {
                 </Dialog>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-8">
-              <HiringInformationCardComponent
-                data={hiring?.hiringInformation}
-              />
+            <div className="grid grid-cols-3 gap-8">
+              <div className="grid col-span-2">
+                <HiringInformationCardComponent
+                  data={hiring?.hiringInformation}
+                  services={hiring?.serviceRooms || []}
+                />
+              </div>
               <div>
                 {members.length > 0 ? (
                   <>
-                    <div className="grid md:grid-rows-3 gap-5">
+                    <div className="grid md:grid-rows-2 gap-5">
                       {currentItems.map((value) => (
-                        <MemberItemCardComponent data={value} />
+                        <MemberItemCardComponent
+                          data={value}
+                          onCallBack={() => setIsChange(!isChange)}
+                        />
                       ))}
                     </div>
                     <div className="flex justify-center mt-3">

@@ -21,24 +21,27 @@ import { MoneyFormat } from "../../utils/formatMoney";
 import Room from "../../api/room/Room";
 import UpdateRoomComponent from "./RoomUpdateCard";
 import CreateHiringComponent from "./HiringHostelCreateCard";
+import CreateBillHirringComponent from "./CreateBillHirring";
+import { ServiceRoomData } from "../../models/Service_models";
 
 interface DataProps {
   data: RoomData | undefined;
-  availablePeople: number;
   activePeople: number;
   onCallback: () => void;
+  services: ServiceRoomData[];
+  hiringId : number
 }
 const RoomDetailCardComponent = ({
   data,
-  availablePeople,
   activePeople,
   onCallback,
+  services,
+  hiringId,
 }: DataProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
   const [isDialogUpdateOpen, setIsDialogUpdateOpen] = useState(false);
   const [isDialogCreateOpen, setIsDialogCreateOpen] = useState(false);
-  const [isCreate, setIsCreate] = useState(false);
   const navigative = useNavigate();
 
   const deleteRoom = async (roomId: number | undefined) => {
@@ -149,7 +152,6 @@ const RoomDetailCardComponent = ({
                       <DialogDescription>
                         <TableServiceHostelComponent
                           hostelId={data?.hostelID}
-                          isLoad={isCreate}
                         />
                       </DialogDescription>
                     </DialogHeader>
@@ -198,14 +200,10 @@ const RoomDetailCardComponent = ({
                             roomFee={data?.roomFee}
                             onCallBack={onCallback}
                             hiringType={1}
+
                           />
                         ) : (
-                          <div className="uppercase font-bold flex items-center">
-                            <span className="mr-2">
-                              <SquarePen />
-                            </span>
-                            Tạo phiếu thanh toán
-                          </div>
+                          <CreateBillHirringComponent services={services} data={data} people={activePeople} hiringId={hiringId} onCallBack={onCallback}/>
                         )}
                       </DialogDescription>
                     </DialogHeader>

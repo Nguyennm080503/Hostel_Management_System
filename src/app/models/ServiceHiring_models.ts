@@ -11,9 +11,16 @@ export interface ServiceHiringData{
     serviceHostelName : string
     serviceHostelPrice : number
     measurement : MeasurementData
+    serviceLogIndex : ServiceLogIndex[]
 }
 
 export interface ServiceHiringUpdate{
     serviceHostelID : number
     serviceHostelPrice : number
+}
+
+export interface ServiceLogIndex{
+    dateCreate : string
+    serviceLogIndexID : number
+    serviceLog : number
 }
