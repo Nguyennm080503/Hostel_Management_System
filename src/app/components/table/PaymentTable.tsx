@@ -121,7 +121,7 @@ import { useNavigate } from "react-router-dom";
                   colSpan={5}
                   className="text-left py-4 flex items-start"
                 >
-                  Không có dịch vụ nào.
+                  Không lịch sử thanh toán nào.
                 </TableCell>
               </TableRow>
             )}

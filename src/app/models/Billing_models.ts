@@ -1,4 +1,5 @@
 import { HiringHostelDetail } from "./Hiring_models"
+import { HostelData } from "./Hostel_models"
 
 export interface BillCreate{
     hiringRoomHostelID : number
@@ -6,6 +7,20 @@ export interface BillCreate{
     billPaymentAmount : number
     billNote : string
     billDetails : BillDetailCreate[]
+}
+
+export interface BillPayCreate{
+    hostelID : number
+    billPaymentType : number
+    billPaymentAmount : number
+    billNote : string 
+}
+
+export interface BillPayForm{
+    hostelID : number
+    hostelName : string
+    billPaymentAmount : number
+    billService: string
 }
 
 export interface BillDetailCreate{
@@ -21,6 +36,7 @@ export interface BillDetailCreate{
 
 export interface BillInformation{
     billPaymentID : number
+    hostelID : number
     hiringRoomHostelID : number
     billPaymentType : number
     billPaymentAmount : number
@@ -28,6 +44,7 @@ export interface BillInformation{
     dateCreate : string
     details : BillDetail[]
     hiring : HiringHostelDetail
+    hostel : HostelData
 }
 
 export interface BillDetail{
@@ -40,4 +57,11 @@ export interface BillDetail{
     amount : number
     finalAmount : number
     note : string
+}
+
+export interface SearchParam {
+    room: string;
+    hostel: string;
+    dateCreateFrom: Date | null,
+    dateCreateTo: Date | null,
 }

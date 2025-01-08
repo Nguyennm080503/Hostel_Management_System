@@ -1,4 +1,4 @@
-import { LogOut, Menu, Home, Users, Wrench } from "lucide-react";
+import { LogOut, Menu, Home, Users, Wrench, CreditCard } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useContext } from "react";
@@ -73,6 +73,11 @@ const SideBarSideResponsive = () => {
       name: "Dịch vụ",
       icon: <Wrench className="h-4 w-4" />,
       link: "/services",
+    },
+    {
+      name: "Hóa đơn",
+      icon: <CreditCard className="h-4 w-4" />,
+      link: "/bills",
     },
   ];
 

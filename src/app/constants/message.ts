@@ -73,6 +73,18 @@ export const ErrorMessageLogin = {
     },
   };
 
+  export const ErrorMessageCreateBillPay = {
+    hostelID: {
+      required: "Tên nhà chi tiền đang trống !",
+    },
+    billPaymentAmount: {
+      required: "Giá tiền chi đang trống !",
+    },
+    servicePay: {
+      required: "Tên dịch vụ chi đang trống !",
+    },
+  };
+
   export const ErrorMessageCreateRoom = {
     roomName: {
       required: "Tên phòng đang trống !",

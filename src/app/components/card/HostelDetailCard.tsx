@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import Hostel from "../../api/hostel/Hostel";
 import customToast from "../../utils/CustomToast";
 import { ErrorIcon, SuccessIcon } from "../toast/ToastIcon";
+import CreateHiringComponent from "./HiringHostelCreateCard";
+import CreateBillHirringComponent from "./CreateBillHirring";
 
 interface DataProps {
   data: HostelData | undefined;
@@ -167,28 +169,63 @@ const HostelDetailCardComponent = ({
                   </DialogContent>
                 </Dialog>
                 {data?.hostelType === 2 && (
-                <Dialog open={isDialogCreateOpen} onOpenChange={setIsDialogCreateOpen}>
-                  <DialogTrigger asChild>
-                      <Button className="bg-blue-900 hover:bg-blue-300">
-                        Tạo thời gian thuê
-                      </Button>
-                  </DialogTrigger>
-                  <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                    <DialogHeader>
-                      <DialogTitle>
-                        <div className="uppercase font-bold flex items-center">
-                          <span className="mr-2">
-                            <SquarePen />
-                          </span>
-                          Tạo yêu cầu thuê
-                        </div>
-                      </DialogTitle>
-                      <DialogDescription>
-                        
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
+                  <Dialog
+                    open={isDialogCreateOpen}
+                    onOpenChange={setIsDialogCreateOpen}
+                  >
+                    <DialogTrigger asChild>
+                      {data?.status !== "Hiring" ? (
+                        <Button className="bg-blue-900 hover:bg-blue-300">
+                          Tạo thời gian thuê
+                        </Button>
+                      ) : (
+                        <Button className="bg-blue-900 hover:bg-blue-300">
+                          Tạo phiếu thanh toán
+                        </Button>
+                      )}
+                    </DialogTrigger>
+                    <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                      <DialogHeader>
+                        <DialogTitle>
+                          {data?.status !== "Hiring" ? (
+                            <div className="uppercase font-bold flex items-center">
+                              <span className="mr-2">
+                                <SquarePen />
+                              </span>
+                              Tạo yêu cầu thuê
+                            </div>
+                          ) : (
+                            <div className="uppercase font-bold flex items-center">
+                              <span className="mr-2">
+                                <SquarePen />
+                              </span>
+                              Tạo phiếu thanh toán
+                            </div>
+                          )}
+                        </DialogTitle>
+                        <DialogDescription>
+                          {/* {data?.status !== "Hiring" ? (
+                            <CreateHiringComponent
+                              hostelId={data?.hostelID}
+                              roomId={data?.roomID}
+                              roomFee={data?.roomFee}
+                              onCallBack={onCallback}
+                              hiringType={1}
+                            />
+                          ) : (
+                            <CreateBillHirringComponent
+                              services={services}
+                              data={data}
+                              people={activePeople}
+                              hiringId={hiringId}
+                              onCallBack={onCallback}
+                              hostelName={hostelName}
+                            />
+                          )} */}
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
                 )}
 
                 <Dialog

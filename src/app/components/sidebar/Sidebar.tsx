@@ -1,5 +1,5 @@
 import { AuthContext } from "../../contexts/AuthContext";
-import { Home, LogOut, Users, Wrench } from "lucide-react";
+import { CreditCard, Home, LogOut, Users, Wrench } from "lucide-react";
 import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -76,6 +76,11 @@ const Sidebar = () => {
       name: "Dịch vụ",
       icon: <Wrench className="h-4 w-4" />,
       link: "/services",
+    },
+    {
+      name: "Hóa đơn",
+      icon: <CreditCard className="h-4 w-4" />,
+      link: "/bills",
     },
   ];
 

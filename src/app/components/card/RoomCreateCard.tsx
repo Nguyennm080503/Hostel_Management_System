@@ -21,7 +21,6 @@ import { useFormik } from "formik";
 import { ErrorMessageCreateRoom } from "../../constants/message";
 import * as Yup from "yup";
 import { Button } from "../ui/button";
-import ComboboxTypeHostelComponent from "../combobox/TypeHostelCombobox";
 import { RoomCreate } from "../../models/Room_models";
 import Room from "../../api/room/Room";
 import { formatCurrency, parseCurrencyToNumber } from "../../utils/formatMoney";

@@ -3,6 +3,7 @@ import requests from "../request";
   
   const HiringHostel = {
     getHiringCurrent: (value: number) => requests.jwtApiGet(`/api/hiring/current?roomId=${value}`),
+    getHiringCurrentByHostel: (value: number) => requests.jwtApiGet(`/api/hiring/current/hostel?hostelId=${value}`),
     createHiring: (value : NewHiringHostel) => requests.jwtApiPost("/api/hiring/add/hiring", value),
 
     createMember: (value : NewMemberData) => requests.jwtApiPost("/api/member/add/member", value),

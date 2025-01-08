@@ -29,7 +29,8 @@ interface DataProps {
   activePeople: number;
   onCallback: () => void;
   services: ServiceRoomData[];
-  hiringId : number
+  hiringId : number;
+  hostelName : string
 }
 const RoomDetailCardComponent = ({
   data,
@@ -37,6 +38,7 @@ const RoomDetailCardComponent = ({
   onCallback,
   services,
   hiringId,
+  hostelName
 }: DataProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
@@ -200,10 +202,9 @@ const RoomDetailCardComponent = ({
                             roomFee={data?.roomFee}
                             onCallBack={onCallback}
                             hiringType={1}
-
                           />
                         ) : (
-                          <CreateBillHirringComponent services={services} data={data} people={activePeople} hiringId={hiringId} onCallBack={onCallback}/>
+                          <CreateBillHirringComponent services={services} data={data} people={activePeople} hiringId={hiringId} onCallBack={onCallback} hostelName={hostelName}/>
                         )}
                       </DialogDescription>
                     </DialogHeader>

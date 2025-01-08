@@ -92,7 +92,8 @@ const RoomDetailCustomerPage = () => {
           activePeople={hiring?.members.length || 0}
           onCallback={() => setIsChange((prev) => !prev)}
           services={hiring?.serviceRooms || []}
-          hiringId = {hiring?.hiringInformation.hiringRoomHostelID || 0}
+          hiringId = {hiring?.hiringInformation ? hiring.hiringInformation.hiringRoomHostelID : 0}
+          hostelName = {hiring?.hiringInformation ? hiring.hiringInformation.hostel.hostelName : ""}
         />
 
         {room?.status === "Hiring" && (

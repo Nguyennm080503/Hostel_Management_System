@@ -1,14 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
-import Bill from "../../../../../../api/bill/Bill";
+import Bill from "../../../../api/bill/Bill";
 import { useEffect, useState } from "react";
-import Loading from "../../../../../../components/loading/Loading";
-import SideBarSideResponsive from "../../../../../../components/sidebar/SidebarRespo";
+import Loading from "../../../../components/loading/Loading";
+import SideBarSideResponsive from "../../../../components/sidebar/SidebarRespo";
 import { ArrowLeft } from "lucide-react";
-import { BillInformation } from "../../../../../../models/Billing_models";
-import TablePaymentServiceComponent from "../../../../../../components/table/PaymentService";
-import { MoneyFormat } from "../../../../../../utils/formatMoney";
+import { BillInformation } from "../../../../models/Billing_models";
+import TablePaymentServiceComponent from "../../../../components/table/PaymentService";
+import { MoneyFormat } from "../../../../utils/formatMoney";
 
-const PaymentDetailPage = () => {
+const BillDetailPage = () => {
   const { paymentId } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bill, setBill] = useState<BillInformation>();
@@ -103,4 +103,4 @@ const PaymentDetailPage = () => {
   );
 };
 
-export default PaymentDetailPage;
+export default BillDetailPage;

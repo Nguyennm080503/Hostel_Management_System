@@ -18,6 +18,7 @@ interface DataProps {
   people: number;
   hiringId: number;
   onCallBack: () => void;
+  hostelName: string;
 }
 
 const CreateBillHirringComponent = ({
@@ -26,6 +27,7 @@ const CreateBillHirringComponent = ({
   people,
   hiringId,
   onCallBack,
+  hostelName,
 }: DataProps) => {
   const [billCreate, setBillCreate] = useState<BillCreate>();
   const [paymentType, setPaymentType] = useState<"month" | "day">("month");
@@ -123,6 +125,8 @@ const CreateBillHirringComponent = ({
           year +
           "( " +
           data.roomName +
+          " / nhà " +
+          hostelName +
           " )",
         billPaymentAmount: totalAmount,
         billPaymentType: 1,
