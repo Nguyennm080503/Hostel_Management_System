@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ServiceHiringData } from "../../models/ServiceHiring_models";
+import { ServiceHiringGeneralData } from "../../models/ServiceHiring_models";
 import { MoneyFormat } from "../../utils/formatMoney";
 import TypeComponent from "../type/TypeComponent";
 import { SquareX, Trash, Wrench } from "lucide-react";
@@ -19,7 +19,7 @@ import ServiceHiring from "../../api/serviceHiring/ServiceHiring";
 import UpdateServiceHiringComponent from "./ServiceUpdateCard";
 
 interface DataProps {
-  data: ServiceHiringData;
+  data: ServiceHiringGeneralData;
   onCallback: () => void;
 }
 const ServiceItemCardComponent = ({ data, onCallback }: DataProps) => {

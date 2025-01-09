@@ -39,8 +39,9 @@ import { ServiceRoomCreate } from "../../models/Service_models";
 
 interface DataProps {
   hostelId: number | undefined;
-  roomId: number | undefined;
-  roomFee: number | undefined;
+  roomId: number;
+  roomFee?: number | undefined;
+  hostelFee?: number | undefined;
   hiringType: number;
   onCallBack: () => void;
 }
@@ -49,6 +50,7 @@ const CreateHiringComponent = ({
   hostelId,
   roomId,
   roomFee,
+  hostelFee,
   hiringType,
 }: DataProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,7 +82,7 @@ const CreateHiringComponent = ({
       accountHiringPhone: "",
       accountHiringAddress: "",
       accountHiringCitizen: "",
-      depositAmount: roomFee,
+      depositAmount: hiringType === 1 ? roomFee : hostelFee,
       hostelID: hostelId,
       roomID: roomId,
       hiringType: hiringType,
@@ -95,6 +97,7 @@ const CreateHiringComponent = ({
         const formattedValue = {
           ...values,
           serviceRooms: selectedServices,
+          roomID: roomId,
           depositAmount: parseCurrencyToNumber(values.depositAmount.toString()),
           hiringEnd: dayjs(values.hiringStart).add(period, "month").toDate(),
         };
@@ -104,7 +107,6 @@ const CreateHiringComponent = ({
           values.accountHiringPhone !== undefined &&
           values.accountHiringAddress !== undefined &&
           values.accountHiringCitizen !== undefined &&
-          values.roomID !== undefined &&
           values.hiringType !== undefined &&
           values.hiringStart !== undefined &&
           values.depositAmount !== undefined
@@ -427,7 +429,7 @@ const CreateHiringComponent = ({
                     </TooltipProvider>
                   </div>
                 </div>
-                <ServiceRoomHirringCardComponent onCallback={handleServiceSelection}/>
+                <ServiceRoomHirringCardComponent onCallback={handleServiceSelection} hostelId={hostelId || 0}/>
               </CardContent>
               <CardFooter className="flex justify-end">
                 <Button

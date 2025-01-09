@@ -8,15 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import ServiceHiring from "../../api/serviceHiring/ServiceHiring";
 import { ServiceHiringData } from "../../models/ServiceHiring_models";
 import { ServiceRoomCreate } from "../../models/Service_models";
 import { MoneyFormat } from "../../utils/formatMoney";
+import Service from "../../api/service/Service";
 
 interface DataProps {
   onCallback: (createService: ServiceRoomCreate[]) => void;
+  hostelId : number
 }
-const ServiceRoomHirringCardComponent = ({ onCallback }: DataProps) => {
+const ServiceRoomHirringCardComponent = ({ onCallback, hostelId }: DataProps) => {
   const [servicesList, setServicesList] = useState<ServiceHiringData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [createService, setCreateService] = useState<ServiceRoomCreate[]>([]);
@@ -28,19 +29,21 @@ const ServiceRoomHirringCardComponent = ({ onCallback }: DataProps) => {
   const getServices = async () => {
     setIsLoading(true);
     try {
-      const response = await ServiceHiring.getServices();
-      setServicesList(response || []);
-
-      const initialSelectedServices = (response || []).map((service: any) => ({
-        serviceHostelRoomID: service.serviceHostelID,
-        newServiceLogIndexDto: {
-          serviceRoomID: 0,
-          serviceHostelID: 0,
-          serviceLog: 0,
-        },
-      }));
-      setCreateService(initialSelectedServices);
-      onCallback(initialSelectedServices);
+      if(hostelId){
+        const response = await Service.getServicesHostel(hostelId);
+        setServicesList(response || []);
+  
+        const initialSelectedServices = (response || []).map((service: any) => ({
+          serviceHostelRoomID: service.serviceHostelRoomID,
+          newServiceLogIndexDto: {
+            serviceRoomID: service.serviceHostelRoomID,
+            serviceHostelID: service.serviceHostelRoomID,
+            serviceLog: 0,
+          },
+        }));
+        setCreateService(initialSelectedServices);
+        onCallback(initialSelectedServices);
+      }
     } catch (error) {
       customToast({
         icon: <WarningIcon />,
@@ -59,10 +62,10 @@ const ServiceRoomHirringCardComponent = ({ onCallback }: DataProps) => {
     isChecked: boolean
   ) => {
     const serviceData: ServiceRoomCreate = {
-      serviceHostelRoomID: service.serviceHostelID,
+      serviceHostelRoomID: service.serviceHostelRoomID,
       newServiceLogIndexDto: {
-        serviceRoomID: 0,
-        serviceHostelID: 0,
+        serviceRoomID: service.serviceHostelRoomID,
+        serviceHostelID: service.serviceHostelRoomID,
         serviceLog: 0,
       },
     };
@@ -71,7 +74,7 @@ const ServiceRoomHirringCardComponent = ({ onCallback }: DataProps) => {
       const updatedServices = isChecked
         ? [...prev, serviceData]
         : prev.filter(
-            (item) => item.serviceHostelRoomID !== service.serviceHostelID
+            (item) => item.serviceHostelRoomID !== service.hiringServiceHostelID
           );
       onCallback(updatedServices);
       return updatedServices;
@@ -86,7 +89,7 @@ const ServiceRoomHirringCardComponent = ({ onCallback }: DataProps) => {
   const handleInputChange = (service: ServiceHiringData, value: number) => {
     setCreateService((prev) =>
       prev.map((item) =>
-        item.serviceHostelRoomID === service.serviceHostelID
+        item.serviceHostelRoomID === service.serviceHostelRoomID
           ? {
               ...item,
               newServiceLogIndexDto: {
@@ -114,27 +117,27 @@ const ServiceRoomHirringCardComponent = ({ onCallback }: DataProps) => {
             <CardContent className="overflow-x-auto h-[150px]">
               {servicesList.map((service) => {
                 const isChecked = createService.some(
-                  (item) => item.serviceHostelRoomID === service.serviceHostelID
+                  (item) => item.serviceHostelRoomID === service.serviceHostelRoomID
                 );
                 return (
-                  <div key={service.serviceHostelID} className="mb-4">
+                  <div key={service.serviceHostelRoomID} className="mb-4">
                     <div className="flex items-center gap-8">
                       <input
                         className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         type="checkbox"
-                        id={`service-${service.serviceHostelID}`}
+                        id={`service-${service.serviceHostelRoomID}`}
                         checked={isChecked}
                         onChange={(e) =>
                           handleCheckboxChange(service, e.target.checked)
                         }
                       />
-                      <label htmlFor={`service-${service.serviceHostelID}`}>
-                        {service.serviceHostelName} (
-                        {MoneyFormat(service.serviceHostelPrice)}/
-                        {service.measurement.measurementName})
+                      <label htmlFor={`service-${service.serviceHostelRoomID}`}>
+                        {service.serviceHostel.serviceHostelName} (
+                        {MoneyFormat(service.serviceHostel.serviceHostelPrice)}/
+                        {service.serviceHostel.measurement.measurementName})
                       </label>
                       {isChecked &&
-                        service.measurement.measurementType === 2 && (
+                        service.serviceHostel.measurement.measurementType === 2 && (
                           <input
                             type="number"
                             className="border rounded p-1 w-24 ml-2"

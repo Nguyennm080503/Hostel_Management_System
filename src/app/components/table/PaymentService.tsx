@@ -37,7 +37,7 @@ const TablePaymentServiceComponent = ({ services }: DataProps) => {
               <TableCell className="text-right border-r-2 border-gray-300">
                 {service.newNumber !== 0 && service.newNumber}
               </TableCell>
-              <TableCell className="text-right border-r-2 border-gray-300">{service.number}</TableCell>
+              <TableCell className="text-right border-r-2 border-gray-300">{service.number !== 0 && service.number}</TableCell>
               <TableCell className="text-right border-r-2 border-gray-300">
                 {MoneyFormat(service.amount)}
               </TableCell>

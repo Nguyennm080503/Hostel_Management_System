@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import ServiceHiring from "../../api/serviceHiring/ServiceHiring";
-import { ServiceHiringData } from "../../models/ServiceHiring_models";
+import { ServiceHiringGeneralData } from "../../models/ServiceHiring_models";
 import Service from "../../api/service/Service";
 import { ServiceHostelCreate } from "../../models/Service_models";
 import { Button } from "../ui/button";
@@ -21,7 +21,7 @@ interface DataProps {
   onCallback: () => void;
 }
 const ServiceHostelCardComponent = ({ hostelId, onCallback }: DataProps) => {
-  const [servicesList, setServicesList] = useState<ServiceHiringData[]>([]);
+  const [servicesList, setServicesList] = useState<ServiceHiringGeneralData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [createService, setCreateService] = useState<ServiceHostelCreate[]>([]);
 

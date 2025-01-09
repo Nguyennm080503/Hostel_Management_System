@@ -58,14 +58,22 @@ const PaymentDetailPage = () => {
                   <span className="font-bold">Nhà : </span>
                   {bill?.hiring.hostel.hostelName}
                 </div>
-                <div>
-                  <span className="font-bold">Phòng : </span>
-                  {bill?.hiring.room.roomName}
-                </div>
+                {bill?.hiring.room && (
+                  <div>
+                    <span className="font-bold">Phòng : </span>
+                    {bill?.hiring.room.roomName}
+                  </div>
+                )}
                 <div>
                   <span className="font-bold">Số điện thoại : </span>
                   {bill?.hiring.accountHiringPhone}
                 </div>
+                {!bill?.hiring.room && (
+                  <div>
+                    <span className="font-bold">Số căn cước : </span>
+                    {bill?.hiring.accountHiringCitizen}
+                  </div>
+                )}
               </div>
               <div className="">
                 <div>
@@ -76,10 +84,12 @@ const PaymentDetailPage = () => {
                   <span className="font-bold">Người đại diện thuê : </span>
                   {bill?.hiring.accountHiringName}
                 </div>
-                <div>
-                  <span className="font-bold">Số căn cước : </span>
-                  {bill?.hiring.accountHiringCitizen}
-                </div>
+                {bill?.hiring.room && (
+                  <div>
+                    <span className="font-bold">Số căn cước : </span>
+                    {bill?.hiring.accountHiringCitizen}
+                  </div>
+                )}
               </div>
             </div>
             <div className="mt-5">

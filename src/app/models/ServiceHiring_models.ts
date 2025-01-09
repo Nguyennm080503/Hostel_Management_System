@@ -7,10 +7,21 @@ export interface ServiceHiringCreate{
 }
 
 export interface ServiceHiringData{
+    hiringServiceHostelID : number
+    serviceHostel: {
+        measurement : MeasurementData
+        serviceHostelName : string
+        serviceHostelPrice : number
+    }
+    serviceHostelRoomID: number
+    serviceLogIndex : ServiceLogIndex[]
+}
+
+export interface ServiceHiringGeneralData{
     serviceHostelID : number
+    measurement : MeasurementData
     serviceHostelName : string
     serviceHostelPrice : number
-    measurement : MeasurementData
     serviceLogIndex : ServiceLogIndex[]
 }
 
@@ -18,6 +29,7 @@ export interface ServiceHiringUpdate{
     serviceHostelID : number
     serviceHostelPrice : number
 }
+
 
 export interface ServiceLogIndex{
     dateCreate : string

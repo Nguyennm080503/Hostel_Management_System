@@ -1,5 +1,5 @@
 import { HostelData } from "../../models/Hostel_models";
-import { Home, MapPin, SquarePen, Trash, Wrench } from "lucide-react";
+import { CircleDollarSign, Home, MapPin, SquarePen, Trash, Wrench } from "lucide-react";
 import { hostelstatus } from "../../constants/status/hostelStatus";
 import StatusComponent from "../status/StatusComponent";
 import { Button } from "../ui/button";
@@ -22,17 +22,22 @@ import customToast from "../../utils/CustomToast";
 import { ErrorIcon, SuccessIcon } from "../toast/ToastIcon";
 import CreateHiringComponent from "./HiringHostelCreateCard";
 import CreateBillHirringComponent from "./CreateBillHirring";
+import { HiringInformationData } from "../../models/Hiring_models";
+import { ServiceHostelData } from "../../models/Service_models";
+import { MoneyFormat } from "../../utils/formatMoney";
 
 interface DataProps {
   data: HostelData | undefined;
   availableRoom: number;
   emptyRoom: number;
+  hiring? : HiringInformationData | undefined
   onCallback: () => void;
 }
 const HostelDetailCardComponent = ({
   data,
   availableRoom,
   emptyRoom,
+  hiring,
   onCallback,
 }: DataProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -109,12 +114,20 @@ const HostelDetailCardComponent = ({
                 </span>
                 {data?.hostelName}
               </h3>
-              <div className="flex items-center mb-5">
+              <div className="flex items-center">
                 <span className="mr-2">
                   <MapPin color="blue" />
                 </span>
                 {data?.hostelAddress}
               </div>
+              {data?.hostelPrice !== 0 && (
+                <div className="flex items-center mb-5">
+                <span className="mr-2">
+                  <CircleDollarSign color="blue" />
+                </span>
+                {MoneyFormat(data?.hostelPrice || 0)} / tháng
+              </div>
+              )}
               <div className="flex justify-between">
                 <div className="flex flex-col items-start gap-1">
                   <div className="text-sm text-gray-500">
@@ -204,24 +217,24 @@ const HostelDetailCardComponent = ({
                           )}
                         </DialogTitle>
                         <DialogDescription>
-                          {/* {data?.status !== "Hiring" ? (
+                          {data?.status !== "Hiring" ? (
                             <CreateHiringComponent
                               hostelId={data?.hostelID}
-                              roomId={data?.roomID}
-                              roomFee={data?.roomFee}
+                              hostelFee={data?.hostelPrice}
+                              roomId={0}
                               onCallBack={onCallback}
-                              hiringType={1}
+                              hiringType={2}
                             />
                           ) : (
                             <CreateBillHirringComponent
-                              services={services}
-                              data={data}
-                              people={activePeople}
-                              hiringId={hiringId}
+                              services={hiring?.serviceRooms || []}
+                              hostel={data}
+                              hiringId={hiring?.hiringInformation.hiringRoomHostelID || 0}
                               onCallBack={onCallback}
-                              hostelName={hostelName}
+                              hostelName={data.hostelName}
+                              type={2}
                             />
-                          )} */}
+                          )}
                         </DialogDescription>
                       </DialogHeader>
                     </DialogContent>

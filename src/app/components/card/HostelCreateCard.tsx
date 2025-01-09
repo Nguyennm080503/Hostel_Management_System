@@ -24,6 +24,7 @@ import { Button } from "../ui/button";
 import { HostelCreate } from "../../models/Hostel_models";
 import Hostel from "../../api/hostel/Hostel";
 import ComboboxTypeHostelComponent from "../combobox/TypeHostelCombobox";
+import { formatCurrency, parseCurrencyToNumber } from "../../utils/formatMoney";
 
 interface DataProps {
   onCallBack: () => void;
@@ -45,6 +46,7 @@ const CreateHostelComponent = ({ onCallBack }: DataProps) => {
       hostelAddress: "",
       hostelRooms: 0,
       hostelType: 1,
+      hostelPrice : 0
     } as HostelCreate,
     validationSchema,
     onSubmit: async (values: HostelCreate) => {
@@ -53,6 +55,7 @@ const CreateHostelComponent = ({ onCallBack }: DataProps) => {
         const updatedValues = {
           ...values,
           hostelType: Number(values.hostelType),
+          hostelPrice : parseCurrencyToNumber(values.hostelPrice.toString())
         };
         if (
           values.hostelName !== undefined &&
@@ -237,8 +240,8 @@ const CreateHostelComponent = ({ onCallBack }: DataProps) => {
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-
-                  <div>
+                </div>
+                <div className="mt-3">
                     <Label htmlFor="hostelType">
                       Loại nhà <span className="text-red-600">*</span>
                     </Label>
@@ -247,9 +250,11 @@ const CreateHostelComponent = ({ onCallBack }: DataProps) => {
                       onTypeSelect={(value) => {
                         formik.setFieldValue("hostelType", value);
                       }}
+                      onFeeChange={(price) => {
+                        formik.setFieldValue("hostelPrice", price);
+                      }}
                     />
                   </div>
-                </div>
                 
               </CardContent>
               <CardFooter className="flex justify-end">

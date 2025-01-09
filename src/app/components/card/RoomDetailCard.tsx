@@ -198,13 +198,13 @@ const RoomDetailCardComponent = ({
                         {data?.status !== "Hiring" ? (
                           <CreateHiringComponent
                             hostelId={data?.hostelID}
-                            roomId={data?.roomID}
+                            roomId={data?.roomID || 0}
                             roomFee={data?.roomFee}
                             onCallBack={onCallback}
                             hiringType={1}
                           />
                         ) : (
-                          <CreateBillHirringComponent services={services} data={data} people={activePeople} hiringId={hiringId} onCallBack={onCallback} hostelName={hostelName}/>
+                          <CreateBillHirringComponent services={services} data={data} people={activePeople} hiringId={hiringId} onCallBack={onCallback} hostelName={hostelName} type={1}/>
                         )}
                       </DialogDescription>
                     </DialogHeader>

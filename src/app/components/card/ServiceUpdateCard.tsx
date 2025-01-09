@@ -21,15 +21,13 @@ import { useFormik } from "formik";
 import { ErrorMessageCreateSerivceHiring } from "../../constants/message";
 import * as Yup from "yup";
 import { Button } from "../ui/button";
-import { ServiceHiringData, ServiceHiringUpdate } from "../../models/ServiceHiring_models";
+import { ServiceHiringGeneralData, ServiceHiringUpdate } from "../../models/ServiceHiring_models";
 import ServiceHiring from "../../api/serviceHiring/ServiceHiring";
-import ComboboxServiceComponent from "../combobox/ServiceCombobox";
-import ComboboxMeasurementComponent from "../combobox/MeasurementCombobox";
 import { formatCurrency, parseCurrencyToNumber } from "../../utils/formatMoney";
 
 interface DataProps {
   onCallBack: () => void;
-  service : ServiceHiringData;
+  service : ServiceHiringGeneralData;
 }
 const UpdateServiceHiringComponent = ({ onCallBack, service }: DataProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

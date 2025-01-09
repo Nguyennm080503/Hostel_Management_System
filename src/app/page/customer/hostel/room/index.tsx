@@ -108,7 +108,8 @@ const RoomCustomerPage = () => {
           emptyRoom={
             roomsList.filter((value) => value.status !== "Hiring").length
           }
-          onCallback={() => setIsChange((prev) => !prev)}
+          hiring={hiring}
+          onCallback={onCallBackRoom}
         />
         {hostel?.hostelType !== 2 ? (
           <>

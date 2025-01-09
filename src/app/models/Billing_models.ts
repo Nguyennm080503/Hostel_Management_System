@@ -3,6 +3,7 @@ import { HostelData } from "./Hostel_models"
 
 export interface BillCreate{
     hiringRoomHostelID : number
+    hostelID : number
     billPaymentType : number
     billPaymentAmount : number
     billNote : string

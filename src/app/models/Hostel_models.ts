@@ -4,6 +4,7 @@ export interface HostelData{
     hostelType : number
     hostelAddress : string
     hostelRooms : number
+    hostelPrice : number
     status : string
 }
 
@@ -12,6 +13,7 @@ export interface HostelCreate{
     hostelType : number
     hostelAddress : string
     hostelRooms : number
+    hostelPrice: number
 }
 
 export interface HostelUpdate{

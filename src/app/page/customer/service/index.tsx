@@ -19,11 +19,11 @@ import { Wrench } from "lucide-react";
 import CreateServiceHiringComponent from "../../../components/card/ServiceHiringCreateCard";
 import ServiceItemCardComponent from "../../../components/card/ServiceItemCard";
 import ServiceHiring from "../../../api/serviceHiring/ServiceHiring";
-import { ServiceHiringData } from "../../../models/ServiceHiring_models";
+import { ServiceHiringGeneralData } from "../../../models/ServiceHiring_models";
 
 const ServiceCustomerPage = () => {
-    const [servicesList, setServicesList] = useState<ServiceHiringData[]>([]);
-    const [currentItems, setCurrentItems] = useState<ServiceHiringData[]>([]);
+    const [servicesList, setServicesList] = useState<ServiceHiringGeneralData[]>([]);
+    const [currentItems, setCurrentItems] = useState<ServiceHiringGeneralData[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isCreate, setIsCreate] = useState(false);
@@ -51,7 +51,7 @@ const ServiceCustomerPage = () => {
       }
     };
   
-    const handlePageClick = (items: ServiceHiringData[]) => {
+    const handlePageClick = (items: ServiceHiringGeneralData[]) => {
       setCurrentItems(items);
     };
   

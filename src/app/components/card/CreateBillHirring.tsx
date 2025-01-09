@@ -11,14 +11,17 @@ import customToast from "../../utils/CustomToast";
 import { WarningIcon } from "../toast/ToastIcon";
 import Bill from "../../api/bill/Bill";
 import Loading from "../loading/Loading";
+import { HostelData } from "../../models/Hostel_models";
 
 interface DataProps {
   services: ServiceRoomData[];
-  data: RoomData;
-  people: number;
+  data?: RoomData;
+  people?: number;
   hiringId: number;
   onCallBack: () => void;
   hostelName: string;
+  type: number;
+  hostel?: HostelData;
 }
 
 const CreateBillHirringComponent = ({
@@ -28,6 +31,8 @@ const CreateBillHirringComponent = ({
   hiringId,
   onCallBack,
   hostelName,
+  type,
+  hostel,
 }: DataProps) => {
   const [billCreate, setBillCreate] = useState<BillCreate>();
   const [paymentType, setPaymentType] = useState<"month" | "day">("month");
@@ -39,8 +44,8 @@ const CreateBillHirringComponent = ({
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [billRoom, setBillRoom] = useState<BillDetailCreate>({
     serviceName: "Tiền nhà",
-    amount: data.roomFee,
-    finalAmount: data.roomFee,
+    amount: type === 1 ? data?.roomFee || 0 : hostel?.hostelPrice || 0,
+    finalAmount: type === 1 ? data?.roomFee || 0 : hostel?.hostelPrice || 0,
     newNumber: 0,
     note: "",
     number: 0,
@@ -56,7 +61,8 @@ const CreateBillHirringComponent = ({
         (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) + 1;
 
       if (dayCount > 0) {
-        const dailyRate = data.roomFee / 30;
+        const dailyRate =
+          (type === 1 ? data?.roomFee || 0 : hostel?.hostelPrice || 0) / 30;
         const totalAmount = Math.round(dailyRate * dayCount);
 
         setAmountDate(totalAmount);
@@ -71,8 +77,8 @@ const CreateBillHirringComponent = ({
     } else {
       setBillRoom({
         serviceName: "Tiền nhà",
-        amount: data.roomFee,
-        finalAmount: data.roomFee,
+        amount: type === 1 ? data?.roomFee || 0 : hostel?.hostelPrice || 0,
+        finalAmount: type === 1 ? data?.roomFee || 0 : hostel?.hostelPrice || 0,
         newNumber: 0,
         note: "",
         number: 0,
@@ -80,7 +86,7 @@ const CreateBillHirringComponent = ({
         serviceRoomId: 1,
       });
     }
-  }, [startDate, endDate, paymentType, data.roomFee, amountDate]);
+  }, [startDate, endDate, paymentType, data?.roomFee, amountDate, hostel?.hostelPrice]);
 
   const handleStartDateChange = (date: moment.Moment | null) => {
     setStartDate(date ? date.format("YYYY-MM-DD") : "");
@@ -123,14 +129,13 @@ const CreateBillHirringComponent = ({
           month +
           "/" +
           year +
-          "( " +
-          data.roomName +
-          " / nhà " +
+          "( " + (type === 1 && (data?.roomName || "") + " / nhà ") +
           hostelName +
           " )",
         billPaymentAmount: totalAmount,
         billPaymentType: 1,
         hiringRoomHostelID: hiringId,
+        hostelID: data?.hostelID || 0
       });
     }
   }, [details]);
@@ -192,7 +197,7 @@ const CreateBillHirringComponent = ({
           <div className="mt-3">
             Tiền thuê tháng {new Date().getMonth() + 1}/
             {new Date().getFullYear()}
-            <div>Tiền thuê tháng: {MoneyFormat(data.roomFee)}/tháng</div>
+            <div>Tiền thuê tháng: {type === 1 ? MoneyFormat(data?.roomFee || 0) : MoneyFormat(hostel?.hostelPrice || 0)}/tháng</div>
           </div>
         ) : (
           <div className="mt-3">
@@ -224,7 +229,7 @@ const CreateBillHirringComponent = ({
       </div>
       <ServicePaymentBillCard
         services={services}
-        people={people}
+        people={people || 1}
         onCallBack={(updatedDetails) => {
           const exists = updatedDetails.some(
             (item) => item.serviceName === billRoom.serviceName

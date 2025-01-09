@@ -1,4 +1,4 @@
-import { ServiceHiringData } from "./ServiceHiring_models"
+import { ServiceHiringData, ServiceHiringGeneralData } from "./ServiceHiring_models"
 
 export interface ServiceData{
     serviceID : number
@@ -12,7 +12,7 @@ export interface ServiceCreate{
 export interface ServiceHostelData{
     hiringServiceHostelID : number
     serviceHostelRoomID : number
-    serviceHostel : ServiceHiringData
+    serviceHostel : ServiceHiringGeneralData
 }
 
 export interface ServiceHostelCreate{
@@ -28,7 +28,7 @@ export interface ServiceRoomCreate{
 export interface ServiceRoomData{
     hiringServiceID : number
     serviceHostelRoomID : number
-    serviceRoom : ServiceHiringData
+    serviceRoom : ServiceHiringGeneralData
 }
 
 export interface NewServiceLogIndex{
