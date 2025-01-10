@@ -35,7 +35,7 @@ const ServicePaymentBillCard = ({
           return {
             serviceName: service.serviceRoom.serviceHostelName,
             amount: service.serviceRoom.serviceHostelPrice,
-            finalAmount: service.serviceRoom.serviceHostelPrice * 1,
+            finalAmount: service.serviceRoom.serviceHostelPrice * people,
             newNumber: 0,
             oldNumber: 0,
             note: "",

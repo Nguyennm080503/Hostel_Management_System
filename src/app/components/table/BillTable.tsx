@@ -140,7 +140,7 @@ const TableBillAccountComponent = ({ searchParams, isChange }: DataProps) => {
                     : bill.hostel.hostelName}
                 </TableCell>
                 <TableCell>
-                  {bill.hiring ? bill.hiring.room.roomName : ""}
+                  {bill.hiring ? bill.hiring.room ? bill.hiring.room.roomName : "" : ""}
                 </TableCell>
                 <TableCell>
                   {bill.billPaymentType === 1 ? "Hóa đơn thu" : "Hóa đơn chi"}

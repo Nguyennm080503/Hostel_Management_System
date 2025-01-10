@@ -114,11 +114,11 @@ const CreateBillHirringComponent = ({
     } else {
       let month: number = 0;
       let year: number = 0;
-      if (new Date().getMonth() + 1 === 12) {
+      if (new Date().getMonth() + 2 === 12) {
         month = 1;
         year = new Date().getFullYear() + 1;
       } else {
-        month = new Date().getMonth() + 1;
+        month = new Date().getMonth() + 2;
         year = new Date().getFullYear();
       }
       setTotalAmount(totalAmount);
@@ -129,7 +129,7 @@ const CreateBillHirringComponent = ({
           month +
           "/" +
           year +
-          "( " + (type === 1 && (data?.roomName || "") + " / nhà ") +
+          "( " + (type === 1 ? ((data?.roomName || "") + " / nhà ") : "") +
           hostelName +
           " )",
         billPaymentAmount: totalAmount,
@@ -165,7 +165,7 @@ const CreateBillHirringComponent = ({
   ) : (
     <>
       <h2 className="mb-5 font-bold">
-        Thanh toán tiền thuê tháng {new Date().getMonth() + 1} năm{" "}
+        Thanh toán tiền thuê tháng {new Date().getMonth() + 2} năm{" "}
         {new Date().getFullYear()}
       </h2>
       <div className="bg-white shadow-md rounded-lg p-4 border-gray-200 border-2">
@@ -195,7 +195,7 @@ const CreateBillHirringComponent = ({
 
         {paymentType === "month" ? (
           <div className="mt-3">
-            Tiền thuê tháng {new Date().getMonth() + 1}/
+            Tiền thuê tháng {new Date().getMonth() + 2}/
             {new Date().getFullYear()}
             <div>Tiền thuê tháng: {type === 1 ? MoneyFormat(data?.roomFee || 0) : MoneyFormat(hostel?.hostelPrice || 0)}/tháng</div>
           </div>

@@ -8,6 +8,8 @@ import { Button } from "../../../components/ui/button";
 import { Search } from "lucide-react";
 import customToast from "../../../utils/CustomToast";
 import { ErrorIcon } from "../../../components/toast/ToastIcon";
+import CardDashBoardPaymentComponent from "../../../components/card/CardDashboardPayment";
+import CardChartDashBoardPaymentComponent from "../../../components/card/CardChartPayment";
 
 const DashboardCustomerPage = () => {
   const [dateStart, setDateStart] = useState<Date | null>(null);
@@ -23,8 +25,8 @@ const DashboardCustomerPage = () => {
         customToast({
           description: "Ngày bắt đầu không được lớn hơn ngày kết thúc.",
           duration: 3000,
-          icon: <ErrorIcon/>
-        })
+          icon: <ErrorIcon />,
+        });
       } else {
         setFilteredDates({ startDate: dateStart, endDate: dateEnd });
       }
@@ -32,8 +34,8 @@ const DashboardCustomerPage = () => {
       customToast({
         description: "Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.",
         duration: 3000,
-        icon: <ErrorIcon/>
-      })
+        icon: <ErrorIcon />,
+      });
     }
   };
 
@@ -72,7 +74,7 @@ const DashboardCustomerPage = () => {
             variant="outline"
             style={{ color: "white", backgroundColor: "#078BFE" }}
             className="h-7 p-4"
-            onClick={handleSearch} 
+            onClick={handleSearch}
           >
             <span>
               <Search />
@@ -83,6 +85,19 @@ const DashboardCustomerPage = () => {
           startDate={filteredDates.startDate}
           endDate={filteredDates.endDate}
         />
+        <div className="mt-5">
+          <div className="grid grid-cols-3 gap-10">
+            <div className="grid col-span-2">
+              <CardChartDashBoardPaymentComponent/>
+            </div>
+            <div className="grid col-span-1">
+              <CardDashBoardPaymentComponent
+                startDate={dateStart}
+                endDate={dateEnd}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
