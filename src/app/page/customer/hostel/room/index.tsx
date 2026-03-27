@@ -3,7 +3,10 @@ import RenderPagination from "../../../../components/pagination/Pagination";
 import SideBarSideResponsive from "../../../../components/sidebar/SidebarRespo";
 import { HostelData } from "../../../../models/Hostel_models";
 import customToast from "../../../../utils/CustomToast";
-import { WarningIcon } from "../../../../components/toast/ToastIcon";
+import {
+  SuccessIcon,
+  WarningIcon,
+} from "../../../../components/toast/ToastIcon";
 import Loading from "../../../../components/loading/Loading";
 import Empty from "../../../../../Empty";
 import {
@@ -14,7 +17,7 @@ import {
   DialogTitle,
 } from "../../../../components/ui/dialog";
 import { Button } from "../../../../components/ui/button";
-import { ArrowLeft, DoorClosed, User } from "lucide-react";
+import { ArrowLeft, DoorClosed, User, List, Grid2X2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Room from "../../../../api/room/Room";
 import { RoomData } from "../../../../models/Room_models";
@@ -29,6 +32,7 @@ import {
 import HiringHostel from "../../../../api/hiring/HiringHostel";
 import HiringInformationCardComponent from "../../../../components/card/HiringInformationCard";
 import MemberItemCardComponent from "../../../../components/card/MemberItemCard";
+import TableRoomComponent from "../../../../components/table/RoomTable";
 
 const RoomCustomerPage = () => {
   const [roomsList, setRoomsList] = useState<RoomData[]>([]);
@@ -40,6 +44,7 @@ const RoomCustomerPage = () => {
   );
   const [currentItems, setCurrentItems] = useState<RoomData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isList, setIsList] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isChange, setIsChange] = useState(false);
   const itemsPerPage = 3;
@@ -80,6 +85,22 @@ const RoomCustomerPage = () => {
     }
   };
 
+  // const doneHiring = async (hiringID: number) => {
+  //   try {
+
+  //   } catch (error) {
+  //   } finally {
+  //     setTimeout(() => {
+  //       customToast({
+  //         icon: <SuccessIcon />,
+  //         description: "Thanh lý hợp đồng thuê thành công",
+  //         duration: 3000,
+  //       });
+  //       setIsChange(!isChange);
+  //     }, 1000);
+  //   }
+  // };
+
   const handlePageClick = (items: RoomData[]) => {
     setCurrentItems(items);
   };
@@ -116,62 +137,90 @@ const RoomCustomerPage = () => {
             <h2 className="uppercase font-bold text-lg">
               Danh sách các phòng của nhà
             </h2>
-            <div className="flex items-center justify-end">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <Button
-                  variant="outline"
-                  style={{ color: "white", backgroundColor: "#078BFE" }}
-                  onClick={() => {
-                    if (hostel?.hostelRooms === roomsList.length) {
-                      customToast({
-                        icon: <WarningIcon />,
-                        description:
-                          "Số phòng của nhà đã đủ, không thể tạo thêm!",
-                        duration: 3000,
-                      });
-                    } else {
-                      setIsDialogOpen(true);
-                    }
-                  }}
-                >
-                  Thêm phòng mới
-                </Button>
-                {isDialogOpen && (
-                  <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                    <DialogHeader>
-                      <DialogTitle>
-                        <div className="uppercase font-bold flex items-center">
-                          <span className="mr-2">
-                            <DoorClosed />
-                          </span>
-                          Thêm phòng mới
-                        </div>
-                      </DialogTitle>
-                      <DialogDescription>
-                        <CreateRoomComponent
-                          hostelId={hostel?.hostelID}
-                          onCallBack={onCallBackRoom}
-                        />
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                )}
-              </Dialog>
+            <div className="flex justify-between">
+              <div>
+                <div className="flex">
+                  <div
+                    className="border-black border-2 border-r-0 p-2 cursor-pointer"
+                    onClick={() => setIsList(true)}
+                  >
+                    <List className="w-4 h-4" />
+                  </div>
+                  <div
+                    className="border-black border-2 p-2 cursor-pointer"
+                    onClick={() => setIsList(false)}
+                  >
+                    <Grid2X2 className="w-4 h-4" />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <Button
+                    variant="outline"
+                    style={{ color: "white", backgroundColor: "#078BFE" }}
+                    onClick={() => {
+                      if (hostel?.hostelRooms === roomsList.length) {
+                        customToast({
+                          icon: <WarningIcon />,
+                          description:
+                            "Số phòng của nhà đã đủ, không thể tạo thêm!",
+                          duration: 3000,
+                        });
+                      } else {
+                        setIsDialogOpen(true);
+                      }
+                    }}
+                  >
+                    Thêm phòng mới
+                  </Button>
+                  {isDialogOpen && (
+                    <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                      <DialogHeader>
+                        <DialogTitle>
+                          <div className="uppercase font-bold flex items-center">
+                            <span className="mr-2">
+                              <DoorClosed />
+                            </span>
+                            Thêm phòng mới
+                          </div>
+                        </DialogTitle>
+                        <DialogDescription>
+                          <CreateRoomComponent
+                            hostelId={hostel?.hostelID}
+                            onCallBack={onCallBackRoom}
+                          />
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  )}
+                </Dialog>
+              </div>
             </div>
             {roomsList.length > 0 ? (
               <>
-                <div className="grid md:grid-cols-3 gap-5 sm:grid-cols-1">
-                  {currentItems.map((value) => (
-                    <RoomItemCardComponent data={value} />
-                  ))}
-                </div>
-                <div className="flex justify-center">
-                  <RenderPagination
-                    itemsPerPage={itemsPerPage}
-                    items={roomsList}
-                    onPageChange={handlePageClick}
-                  />
-                </div>
+                {isList ? (
+                  <>
+                    <div className="grid md:grid-cols-3 gap-5 sm:grid-cols-1">
+                      {currentItems.map((value) => (
+                        <RoomItemCardComponent data={value} />
+                      ))}
+                    </div>
+                    <div className="flex justify-center">
+                      <RenderPagination
+                        itemsPerPage={itemsPerPage}
+                        items={roomsList}
+                        onPageChange={handlePageClick}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <TableRoomComponent data={roomsList} />
+                    </div>
+                  </>
+                )}
               </>
             ) : (
               <div className="md:h-[300px] flex items-center justify-center">
@@ -185,40 +234,64 @@ const RoomCustomerPage = () => {
               <>
                 <div className="flex justify-between">
                   <h2 className="flex uppercase font-bold text-lg">
-                    Thông tin thuê
+                    Thông tin hợp đồng thuê
                   </h2>
                   <div className="flex items-center justify-end">
-                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                      <Button
-                        variant="outline"
-                        style={{ color: "white", backgroundColor: "#078BFE" }}
-                        onClick={() => setIsDialogOpen(true)}
-                      >
-                        Thêm thành viên mới
-                      </Button>
-                      {isDialogOpen && (
-                        <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                          <DialogHeader>
-                            <DialogTitle>
-                              <div className="uppercase font-bold flex items-center">
-                                <span className="mr-2">
-                                  <User />
-                                </span>
-                                Thêm thành viên mới
-                              </div>
-                            </DialogTitle>
-                            <DialogDescription>
-                              <CreateMemberComponent
-                                hiringId={
-                                  hiring?.hiringInformation.hiringRoomHostelID
-                                }
-                                onCallBack={onCallBackRoom}
-                              />
-                            </DialogDescription>
-                          </DialogHeader>
-                        </DialogContent>
-                      )}
-                    </Dialog>
+                    <div className="flex justify-between">
+                      <div>
+                        {/* <Button
+                          variant="outline"
+                          style={{ color: "white", backgroundColor: "#078BFE" }}
+                          onClick={() =>
+                            doneHiring(
+                              hiring?.hiringInformation.hiringRoomHostelID || 0
+                            )
+                          }
+                        >
+                          Thanh lý hợp đồng
+                        </Button> */}
+                      </div>
+                      <div>
+                        <Dialog
+                          open={isDialogOpen}
+                          onOpenChange={setIsDialogOpen}
+                        >
+                          <Button
+                            variant="outline"
+                            style={{
+                              color: "white",
+                              backgroundColor: "#078BFE",
+                            }}
+                            onClick={() => setIsDialogOpen(true)}
+                          >
+                            Thêm thành viên mới
+                          </Button>
+                          {isDialogOpen && (
+                            <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  <div className="uppercase font-bold flex items-center">
+                                    <span className="mr-2">
+                                      <User />
+                                    </span>
+                                    Thêm thành viên mới
+                                  </div>
+                                </DialogTitle>
+                                <DialogDescription>
+                                  <CreateMemberComponent
+                                    hiringId={
+                                      hiring?.hiringInformation
+                                        .hiringRoomHostelID
+                                    }
+                                    onCallBack={onCallBackRoom}
+                                  />
+                                </DialogDescription>
+                              </DialogHeader>
+                            </DialogContent>
+                          )}
+                        </Dialog>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-8">

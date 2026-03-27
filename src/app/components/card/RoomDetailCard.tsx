@@ -163,6 +163,7 @@ const RoomDetailCardComponent = ({
                 <Dialog
                   open={isDialogCreateOpen}
                   onOpenChange={setIsDialogCreateOpen}
+                  modal={false}
                 >
                   <DialogTrigger asChild>
                     {data?.status !== "Hiring" ? (

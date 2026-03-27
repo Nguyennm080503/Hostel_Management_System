@@ -33,9 +33,10 @@ import { MoneyFormat } from "../../utils/formatMoney";
 interface DataProps {
   hostelId: number | undefined;
   isLoad?: boolean;
+  onLoadedServiceIds?: (ids: number[]) => void;
 }
 
-const TableServiceHostelComponent = ({ hostelId, isLoad }: DataProps) => {
+const TableServiceHostelComponent = ({ hostelId, isLoad,onLoadedServiceIds }: DataProps) => {
   const [isDialogDeleteServiceOpen, setIsDialogDeleteServiceOpen] =
     useState(false);
   const [services, setService] = useState<ServiceHostelData[]>([]);
@@ -50,6 +51,10 @@ const TableServiceHostelComponent = ({ hostelId, isLoad }: DataProps) => {
         } else {
           setService([]);
         }
+        const ids = (response || []).map(
+          (s : ServiceHostelData) => s.serviceHostel.serviceHostelID
+        );
+        onLoadedServiceIds?.(ids);
       }
     } catch (error) {
       customToast({
@@ -94,7 +99,7 @@ const TableServiceHostelComponent = ({ hostelId, isLoad }: DataProps) => {
   };
 
   return (
-    <div className="max-h-[200px] overflow-y-auto">
+    <div className="max-h-[500px] overflow-y-auto">
       <Table className="whitespace-nowrap">
         <TableHeader>
           <TableRow>

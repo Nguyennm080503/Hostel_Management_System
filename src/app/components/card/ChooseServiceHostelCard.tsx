@@ -18,10 +18,19 @@ import { MoneyFormat } from "../../utils/formatMoney";
 
 interface DataProps {
   hostelId: number | undefined;
+  selectedServiceIds: number[];
+  onUpdateSelected: React.Dispatch<React.SetStateAction<number[]>>;
   onCallback: () => void;
 }
-const ServiceHostelCardComponent = ({ hostelId, onCallback }: DataProps) => {
-  const [servicesList, setServicesList] = useState<ServiceHiringGeneralData[]>([]);
+const ServiceHostelCardComponent = ({
+  hostelId,
+  onCallback,
+  onUpdateSelected,
+  selectedServiceIds,
+}: DataProps) => {
+  const [servicesList, setServicesList] = useState<ServiceHiringGeneralData[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [createService, setCreateService] = useState<ServiceHostelCreate[]>([]);
 
@@ -56,7 +65,11 @@ const ServiceHostelCardComponent = ({ hostelId, onCallback }: DataProps) => {
         description: "Thêm dịch vụ vào nhà thành công",
         duration: 3000,
       });
-    } catch (error : any) {
+      onUpdateSelected((prev) => [
+        ...prev,
+        ...createService.map((x) => x.serviceHostelRoomID),
+      ]);
+    } catch (error: any) {
       customToast({
         icon: <WarningIcon />,
         description: error.response.data,
@@ -82,41 +95,50 @@ const ServiceHostelCardComponent = ({ hostelId, onCallback }: DataProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto h-[150px]">
-              {servicesList.map((service) => (
-                <div
-                  key={service.serviceHostelID}
-                  className="flex items-center mb-2 gap-8"
-                >
-                  <input
-                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    type="checkbox"
-                    id={`service-${service.serviceHostelID}`}
-                    value={service.serviceHostelID}
-                    onChange={(e) => {
-                      const serviceData: ServiceHostelCreate = {
-                        hostelID: hostelId || 0,
-                        serviceHostelRoomID: service.serviceHostelID,
-                      };
-                      if (e.target.checked) {
-                        setCreateService((prev) => [...prev, serviceData]);
-                      } else {
-                        setCreateService((prev) =>
-                          prev.filter(
-                            (item) =>
-                              item.serviceHostelRoomID !==
-                              service.serviceHostelID
-                          )
-                        );
-                      }
-                    }}
-                  />
-                  <label htmlFor={`service-${service.serviceHostelID}`}>
-                    {service.serviceHostelName} (
-                    {MoneyFormat(service.serviceHostelPrice)}/
-                    {service.measurement.measurementName})
-                  </label>
-                </div>
-              ))}
+              {servicesList.map((service) => {
+                const isSelected = selectedServiceIds.includes(
+                  service.serviceHostelID
+                );
+                return (
+                  <>
+                    <div
+                      key={service.serviceHostelID}
+                      className="flex items-center mb-2 gap-8"
+                    >
+                      <input
+                        className={`h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500
+  ${isSelected ? "opacity-50 cursor-not-allowed" : ""}`}
+                        type="checkbox"
+                        id={`service-${service.serviceHostelID}`}
+                        disabled={isSelected}
+                        value={service.serviceHostelID}
+                        onChange={(e) => {
+                          const serviceData: ServiceHostelCreate = {
+                            hostelID: hostelId || 0,
+                            serviceHostelRoomID: service.serviceHostelID,
+                          };
+                          if (e.target.checked) {
+                            setCreateService((prev) => [...prev, serviceData]);
+                          } else {
+                            setCreateService((prev) =>
+                              prev.filter(
+                                (item) =>
+                                  item.serviceHostelRoomID !==
+                                  service.serviceHostelID
+                              )
+                            );
+                          }
+                        }}
+                      />
+                      <label htmlFor={`service-${service.serviceHostelID}`}>
+                        {service.serviceHostelName} (
+                        {MoneyFormat(service.serviceHostelPrice)}/
+                        {service.measurement.measurementName})
+                      </label>
+                    </div>
+                  </>
+                );
+              })}
             </CardContent>
             <CardFooter className="flex justify-end">
               <Button

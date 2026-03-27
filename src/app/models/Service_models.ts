@@ -1,4 +1,4 @@
-import { ServiceHiringData, ServiceHiringGeneralData } from "./ServiceHiring_models"
+import { ServiceHiringGeneralData } from "./ServiceHiring_models"
 
 export interface ServiceData{
     serviceID : number

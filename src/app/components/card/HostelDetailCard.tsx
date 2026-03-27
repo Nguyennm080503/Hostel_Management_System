@@ -1,5 +1,12 @@
 import { HostelData } from "../../models/Hostel_models";
-import { CircleDollarSign, Home, MapPin, SquarePen, Trash, Wrench } from "lucide-react";
+import {
+  CircleDollarSign,
+  Home,
+  MapPin,
+  SquarePen,
+  Trash,
+  Wrench,
+} from "lucide-react";
 import { hostelstatus } from "../../constants/status/hostelStatus";
 import StatusComponent from "../status/StatusComponent";
 import { Button } from "../ui/button";
@@ -23,14 +30,13 @@ import { ErrorIcon, SuccessIcon } from "../toast/ToastIcon";
 import CreateHiringComponent from "./HiringHostelCreateCard";
 import CreateBillHirringComponent from "./CreateBillHirring";
 import { HiringInformationData } from "../../models/Hiring_models";
-import { ServiceHostelData } from "../../models/Service_models";
 import { MoneyFormat } from "../../utils/formatMoney";
 
 interface DataProps {
   data: HostelData | undefined;
   availableRoom: number;
   emptyRoom: number;
-  hiring? : HiringInformationData | undefined
+  hiring?: HiringInformationData | undefined;
   onCallback: () => void;
 }
 const HostelDetailCardComponent = ({
@@ -44,6 +50,7 @@ const HostelDetailCardComponent = ({
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
   const [isDialogUpdateOpen, setIsDialogUpdateOpen] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
+  const [selectedServiceIds, setSelectedServiceIds] = useState<number[]>([]);
   const [isDialogCreateOpen, setIsDialogCreateOpen] = useState(false);
   const navigative = useNavigate();
 
@@ -122,11 +129,11 @@ const HostelDetailCardComponent = ({
               </div>
               {data?.hostelPrice !== 0 && (
                 <div className="flex items-center mb-5">
-                <span className="mr-2">
-                  <CircleDollarSign color="blue" />
-                </span>
-                {MoneyFormat(data?.hostelPrice || 0)} / tháng
-              </div>
+                  <span className="mr-2">
+                    <CircleDollarSign color="blue" />
+                  </span>
+                  {MoneyFormat(data?.hostelPrice || 0)} / tháng
+                </div>
               )}
               <div className="flex justify-between">
                 <div className="flex flex-col items-start gap-1">
@@ -172,9 +179,12 @@ const HostelDetailCardComponent = ({
                         <TableServiceHostelComponent
                           hostelId={data?.hostelID}
                           isLoad={isCreate}
+                          onLoadedServiceIds={setSelectedServiceIds}
                         />
                         <ServiceHostelCardComponent
                           hostelId={data?.hostelID}
+                          selectedServiceIds={selectedServiceIds}
+                          onUpdateSelected={setSelectedServiceIds}
                           onCallback={() => setIsCreate((prep) => !prep)}
                         />
                       </DialogDescription>
@@ -229,7 +239,10 @@ const HostelDetailCardComponent = ({
                             <CreateBillHirringComponent
                               services={hiring?.serviceRooms || []}
                               hostel={data}
-                              hiringId={hiring?.hiringInformation.hiringRoomHostelID || 0}
+                              hiringId={
+                                hiring?.hiringInformation.hiringRoomHostelID ||
+                                0
+                              }
                               onCallBack={onCallback}
                               hostelName={data.hostelName}
                               type={2}

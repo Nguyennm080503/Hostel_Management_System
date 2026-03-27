@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { RoomData } from "../../models/Room_models";
 import { ServiceRoomData } from "../../models/Service_models";
-import { MoneyFormat } from "../../utils/formatMoney";
+import { formatCurrency, MoneyFormat } from "../../utils/formatMoney";
 import { BillCreate, BillDetailCreate } from "../../models/Billing_models";
-import { DatePicker } from "antd";
+import { DatePicker, Select } from "antd";
 import moment from "moment";
 import ServicePaymentBillCard from "./ServicePaymentBillCard";
 import { Button } from "../ui/button";
 import customToast from "../../utils/CustomToast";
-import { WarningIcon } from "../toast/ToastIcon";
+import { SuccessIcon, WarningIcon } from "../toast/ToastIcon";
 import Bill from "../../api/bill/Bill";
 import Loading from "../loading/Loading";
 import { HostelData } from "../../models/Hostel_models";
+const { Option } = Select;
 
 interface DataProps {
   services: ServiceRoomData[];
@@ -51,7 +52,19 @@ const CreateBillHirringComponent = ({
     number: 0,
     oldNumber: 0,
     serviceRoomId: 1,
+    type: 1,
   });
+
+  const now = new Date();
+
+  const [month, setMonth] = useState<number>(now.getMonth() + 1);
+  const [year, setYear] = useState<number>(now.getFullYear());
+
+  // Danh sách tháng
+  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  // Danh sách năm
+  const years = Array.from({ length: 20 }, (_, i) => 2020 + i);
 
   useEffect(() => {
     if (paymentType === "day" && startDate && endDate) {
@@ -84,9 +97,17 @@ const CreateBillHirringComponent = ({
         number: 0,
         oldNumber: 0,
         serviceRoomId: 1,
+        type: 1,
       });
     }
-  }, [startDate, endDate, paymentType, data?.roomFee, amountDate, hostel?.hostelPrice]);
+  }, [
+    startDate,
+    endDate,
+    paymentType,
+    data?.roomFee,
+    amountDate,
+    hostel?.hostelPrice,
+  ]);
 
   const handleStartDateChange = (date: moment.Moment | null) => {
     setStartDate(date ? date.format("YYYY-MM-DD") : "");
@@ -97,14 +118,13 @@ const CreateBillHirringComponent = ({
   };
 
   const calculateTotalAmount = () => {
-    if (details) {
-      const billAmount = details.reduce(
-        (sum, item) => sum + item.finalAmount,
-        0
-      );
-      return billAmount;
-    }
-    return 0;
+    if (!details) return 0;
+
+    return details.reduce(
+      (sum, item) =>
+        item.type === 2 ? sum - item.finalAmount : sum + item.finalAmount,
+      0
+    );
   };
 
   useEffect(() => {
@@ -112,15 +132,6 @@ const CreateBillHirringComponent = ({
     if (totalAmount === 0) {
       setTotalAmount(billRoom.finalAmount);
     } else {
-      let month: number = 0;
-      let year: number = 0;
-      if (new Date().getMonth() + 2 === 12) {
-        month = 1;
-        year = new Date().getFullYear() + 1;
-      } else {
-        month = new Date().getMonth() + 2;
-        year = new Date().getFullYear();
-      }
       setTotalAmount(totalAmount);
       setBillCreate({
         billDetails: details,
@@ -129,13 +140,14 @@ const CreateBillHirringComponent = ({
           month +
           "/" +
           year +
-          "( " + (type === 1 ? ((data?.roomName || "") + " / nhà ") : "") +
+          "( " +
+          (type === 1 ? (data?.roomName || "") + " / nhà " : "") +
           hostelName +
           " )",
         billPaymentAmount: totalAmount,
         billPaymentType: 1,
         hiringRoomHostelID: hiringId,
-        hostelID: data?.hostelID || 0
+        hostelID: data?.hostelID || 0,
       });
     }
   }, [details]);
@@ -144,6 +156,7 @@ const CreateBillHirringComponent = ({
     setIsLoading(true);
     try {
       if (billCreate) {
+        console.log(billCreate);
         await Bill.createBill(billCreate);
       }
     } catch (error: any) {
@@ -153,6 +166,11 @@ const CreateBillHirringComponent = ({
         duration: 3000,
       });
     } finally {
+      customToast({
+        icon: <SuccessIcon />,
+        description: "Tạo hóa đơn thành công",
+        duration: 3000,
+      });
       setTimeout(() => {
         setIsLoading(false);
         onCallBack();
@@ -164,9 +182,21 @@ const CreateBillHirringComponent = ({
     <Loading />
   ) : (
     <>
-      <h2 className="mb-5 font-bold">
-        Thanh toán tiền thuê tháng {new Date().getMonth() + 2} năm{" "}
-        {new Date().getFullYear()}
+      <h2 className="mb-5 font-bold flex justify-between">
+        <div>
+          {data?.roomName} - Người thuê :{" "}
+          {data?.hiringInformation != null
+            ? data?.hiringInformation.hiringInformation.accountHiringName
+            : ""}
+        </div>
+
+        <div>
+          Tiền thuê tháng{" "}
+          {type === 1
+            ? formatCurrency(data?.roomFee.toString() || "")
+            : formatCurrency(hostel?.hostelPrice.toString() || "")}{" "}
+          / tháng
+        </div>
       </h2>
       <div className="bg-white shadow-md rounded-lg p-4 border-gray-200 border-2">
         <div className="font-bold uppercase">Tiền thuê</div>
@@ -195,9 +225,35 @@ const CreateBillHirringComponent = ({
 
         {paymentType === "month" ? (
           <div className="mt-3">
-            Tiền thuê tháng {new Date().getMonth() + 2}/
-            {new Date().getFullYear()}
-            <div>Tiền thuê tháng: {type === 1 ? MoneyFormat(data?.roomFee || 0) : MoneyFormat(hostel?.hostelPrice || 0)}/tháng</div>
+            <div className="flex items-center gap-2">
+              <span>Tiền thuê tháng</span>
+
+              <Select
+                value={month}
+                style={{ width: 100 }}
+                onChange={(value) => setMonth(value)}
+                options={months.map((m) => ({
+                  value: m,
+                  label: `Tháng ${m}`,
+                }))}
+                getPopupContainer={() => document.body}
+                dropdownStyle={{ zIndex: 9999 }}
+              />
+
+              <span>/</span>
+
+              <Select
+                value={year}
+                style={{ width: 120 }}
+                onChange={(value) => setYear(value)}
+                options={years.map((y) => ({
+                  value: y,
+                  label: y,
+                }))}
+                getPopupContainer={() => document.body}
+                dropdownStyle={{ zIndex: 9999 }}
+              />
+            </div>
           </div>
         ) : (
           <div className="mt-3">

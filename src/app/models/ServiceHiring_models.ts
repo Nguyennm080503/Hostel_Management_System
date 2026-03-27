@@ -35,4 +35,5 @@ export interface ServiceLogIndex{
     dateCreate : string
     serviceLogIndexID : number
     serviceLog : number
+    serviceRoomID : number
 }

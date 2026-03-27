@@ -33,6 +33,7 @@ export interface BillDetailCreate{
     finalAmount : number
     note : string
     serviceRoomId : number
+    type: number
 }
 
 export interface BillInformation{
@@ -58,6 +59,7 @@ export interface BillDetail{
     amount : number
     finalAmount : number
     note : string
+    type : number
 }
 
 export interface SearchParam {

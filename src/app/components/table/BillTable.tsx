@@ -21,16 +21,17 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { MoreHorizontal, SquarePen } from "lucide-react";
+import { MoreHorizontal, SquarePen, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import customToast from "../../utils/CustomToast";
-import { WarningIcon } from "../toast/ToastIcon";
+import { SuccessIcon, WarningIcon } from "../toast/ToastIcon";
 import { MoneyFormat } from "../../utils/formatMoney";
 import Bill from "../../api/bill/Bill";
 import { BillInformation, SearchParam } from "../../models/Billing_models";
 import { formatDate } from "../../utils/formatDate";
 import { useNavigate } from "react-router-dom";
 import RenderPagination from "../pagination/Pagination";
+import { billType } from "../../constants/type/billType";
 
 interface DataProps {
   searchParams: SearchParam | null;
@@ -91,6 +92,25 @@ const TableBillAccountComponent = ({ searchParams, isChange }: DataProps) => {
     navigate(`/customer/bills/detail/${paymentId}`);
   };
 
+  const deletePayment = async (paymentId: number) => {
+    try {
+      await Bill.deleteBill(paymentId);
+    } catch (error) {
+      customToast({
+        icon: <WarningIcon />,
+        description: "Đã xảy ra lỗi, xóa thất bại",
+        duration: 3000,
+      });
+    } finally {
+      await fetchGetPaymentHistory();
+      customToast({
+        icon: <SuccessIcon />,
+        description: "Xóa thành công",
+        duration: 3000,
+      });
+    }
+  };
+
   const fetchGetPaymentHistory = async () => {
     try {
       const response = await Bill.getAllBills();
@@ -114,97 +134,127 @@ const TableBillAccountComponent = ({ searchParams, isChange }: DataProps) => {
   }, [isChange]);
 
   return (
-    <div className="max-h-[400px] overflow-y-auto">
-      <Table className="whitespace-nowrap">
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nội dung</TableHead>
-            <TableHead>Nhà</TableHead>
-            <TableHead>Phòng</TableHead>
-            <TableHead>Loại hóa đơn</TableHead>
-            <TableHead>Ngày tạo</TableHead>
-            <TableHead className="text-right">Tổng tiền</TableHead>
-            <TableHead>
-              <span className="sr-only">Actions</span>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredBillList.length > 0 ? (
-            currentItems.map((bill: BillInformation, index: number) => (
-              <TableRow key={index}>
-                <TableCell>{bill.billNote}</TableCell>
-                <TableCell>
-                  {bill.hiring
-                    ? bill.hiring.hostel.hostelName
-                    : bill.hostel.hostelName}
-                </TableCell>
-                <TableCell>
-                  {bill.hiring ? bill.hiring.room ? bill.hiring.room.roomName : "" : ""}
-                </TableCell>
-                <TableCell>
-                  {bill.billPaymentType === 1 ? "Hóa đơn thu" : "Hóa đơn chi"}
-                </TableCell>
-                <TableCell>{formatDate(bill.dateCreate)}</TableCell>
-                <TableCell
-                  className={`text-right ${
-                    bill.billPaymentType === 1
-                      ? "text-green-500"
-                      : "text-red-700"
-                  }`}
-                >
-                  {MoneyFormat(bill.billPaymentAmount)}
-                </TableCell>
-                <TableCell className="text-right">
-                  {bill.billPaymentType === 1 && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoreHorizontal className="h-5 w-5" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem asChild>
-                          <div
-                            className="flex text-blue-500 items-center"
-                            onClick={() =>
-                              viewDetailPayment(bill.billPaymentID)
-                            }
+    <>
+      <div className="max-h-[500px] overflow-y-auto">
+        <Table className="whitespace-nowrap">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nội dung</TableHead>
+              <TableHead>Nhà</TableHead>
+              <TableHead>Phòng</TableHead>
+              <TableHead>Loại hóa đơn</TableHead>
+              <TableHead>Ngày tạo</TableHead>
+              <TableHead className="text-right">Tổng tiền</TableHead>
+              <TableHead>
+                <span className="sr-only">Actions</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredBillList.length > 0 ? (
+              currentItems.map((bill: BillInformation, index: number) => (
+                <TableRow key={index}>
+                  <TableCell
+                    onClick={() => viewDetailPayment(bill.billPaymentID)}
+                    className="underline text-blue-600 cursor-pointer"
+                  >
+                    {bill.billNote}
+                  </TableCell>
+                  <TableCell>
+                    {bill.hiring
+                      ? bill.hiring.hostel.hostelName
+                      : bill.hostel.hostelName}
+                  </TableCell>
+                  <TableCell>
+                    {bill.hiring
+                      ? bill.hiring.room
+                        ? bill.hiring.room.roomName
+                        : ""
+                      : ""}
+                  </TableCell>
+                  <TableCell>
+                    {billType.map(
+                      (status) =>
+                        status.value === bill.billPaymentType && (
+                          <span style={{ color: status.color ?? "#00D836" }}>
+                            {status.name}
+                          </span>
+                        )
+                    )}
+                  </TableCell>
+                  <TableCell>{formatDate(bill.dateCreate)}</TableCell>
+                  <TableCell
+                    className={`text-right ${
+                      bill.billPaymentAmount > 0
+                        ? "text-green-500"
+                        : "text-red-700"
+                    }`}
+                  >
+                    {MoneyFormat(bill.billPaymentAmount)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {(bill.billPaymentType === 1 ||
+                      bill.billPaymentType === 3) && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
                           >
-                            <span className="mr-2">
-                              <SquarePen />
-                            </span>
-                            <div>Xem chi tiết</div>
-                          </div>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
+                            <MoreHorizontal className="h-5 w-5" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem asChild>
+                            <div
+                              className="flex text-blue-500 items-center"
+                              onClick={() =>
+                                viewDetailPayment(bill.billPaymentID)
+                              }
+                            >
+                              <span className="mr-2">
+                                <SquarePen />
+                              </span>
+                              <div>Xem chi tiết</div>
+                            </div>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <div
+                              className="flex text-red-500 items-center"
+                              onClick={() => deletePayment(bill.billPaymentID)}
+                            >
+                              <span className="mr-2">
+                                <Trash />
+                              </span>
+                              <div>Xóa hóa đơn</div>
+                            </div>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="text-left py-4 flex items-start"
+                >
+                  Không có hóa đơn nào.
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                className="text-left py-4 flex items-start"
-              >
-                Không có hóa đơn nào.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            )}
+          </TableBody>
+        </Table>
+      </div>
       <RenderPagination
         itemsPerPage={itemsPerPage}
         items={filteredBillList}
         onPageChange={handlePageClick}
       />
-    </div>
+    </>
   );
 };
 

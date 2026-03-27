@@ -1,3 +1,5 @@
+import { HiringInformationData } from "./Hiring_models"
+
 export interface RoomData{
     roomID : number
     hostelID : number
@@ -9,6 +11,7 @@ export interface RoomData{
     area : number
     status : string
     dateCreate : string
+    hiringInformation : HiringInformationData
 }
 
 export interface RoomCreate{

@@ -36,7 +36,7 @@ const BillPage = () => {
       <div className="sticky top-0">
         <SideBarSideResponsive />
       </div>
-      <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 my-5">
+      <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 my-5 h-full">
         <Collapsible>
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between space-x-4 px-4 bg-stone-300 rounded-sm cursor-pointer mt-5">

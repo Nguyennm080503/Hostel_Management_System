@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { BillInformation } from "../../../../../../models/Billing_models";
 import TablePaymentServiceComponent from "../../../../../../components/table/PaymentService";
 import { MoneyFormat } from "../../../../../../utils/formatMoney";
+import { Button } from "../../../../../../components/ui/button";
 
 const PaymentDetailPage = () => {
   const { paymentId } = useParams();
