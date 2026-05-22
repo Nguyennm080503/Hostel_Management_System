@@ -15,10 +15,9 @@ interface DataProps {
 }
 
 const TablePaymentServiceComponent = ({ services, type }: DataProps) => {
-  const sortedServices =
-    type === 1
-      ? [...services].sort((a, b) => b.billInformationID - a.billInformationID)
-      : [...services].sort((a, b) => a.type - b.type);
+  const sortedServices = [...services].sort(
+    (a, b) => a.type - b.type || b.billInformationID - a.billInformationID,
+  );
 
   return (
     <Table className="whitespace-nowrap">
@@ -43,15 +42,7 @@ const TablePaymentServiceComponent = ({ services, type }: DataProps) => {
       <TableBody>
         {services.length > 0 ? (
           sortedServices.map((service: BillDetail, index: number) => {
-            const isBillType2 = type === 2;
             const isServiceType2 = service.type === 2;
-
-            const isNegative =
-              isBillType2 ||
-              isServiceType2 ||
-              !(type === 1 || service.type === 3);
-
-            const displayAmount = isNegative ? service.finalAmount : -service.finalAmount;
 
             return (
               <TableRow
@@ -84,7 +75,7 @@ const TablePaymentServiceComponent = ({ services, type }: DataProps) => {
                   }`}
                 >
                   {isServiceType2 ? "-" : ""}
-                  {MoneyFormat(displayAmount)}
+                  {MoneyFormat(service.finalAmount)}
                 </TableCell>
               </TableRow>
             );

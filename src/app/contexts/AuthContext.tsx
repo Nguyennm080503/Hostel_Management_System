@@ -70,6 +70,7 @@ const AuthProvider = ({ children }: Props) => {
 
     setUserInfo(undefined);
     setToken(undefined);
+    
   };
 
   return (

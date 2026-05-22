@@ -144,13 +144,13 @@ const RoomCustomerPage = () => {
                     className="border-black border-2 border-r-0 p-2 cursor-pointer"
                     onClick={() => setIsList(true)}
                   >
-                    <List className="w-4 h-4" />
+                    <Grid2X2 className="w-4 h-4" />
                   </div>
                   <div
                     className="border-black border-2 p-2 cursor-pointer"
                     onClick={() => setIsList(false)}
                   >
-                    <Grid2X2 className="w-4 h-4" />
+                    <List className="w-4 h-4" />
                   </div>
                 </div>
               </div>

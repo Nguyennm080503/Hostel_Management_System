@@ -194,7 +194,7 @@ const BillDetailPage = () => {
             ) : (
               <div className="mt-8">
                 <div className="flex justify-end">
-                  <span className="font-bold mr-2">Tổng tiền phải thu :</span>{" "}
+                  <span className="font-bold mr-2">Tổng tiền phải thu dự kiến :</span>{" "}
                   {MoneyFormat((bill?.billPaymentAmount || 0) * -1)}
                 </div>
                 <div className="flex justify-end">
