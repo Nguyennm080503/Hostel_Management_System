@@ -1,7 +1,7 @@
 import { ChartColumn } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { useEffect, useState } from "react";
-import { DashboardPaymentData, DashboardPaymentMonthData } from "../../models/Dashboard_models";
+import { DashboardPaymentMonthData } from "../../models/Dashboard_models";
 import Dashboard from "../../api/dashboard/Dashboard";
 import customToast from "../../utils/CustomToast";
 import { ErrorIcon } from "../toast/ToastIcon";
@@ -45,14 +45,14 @@ export const options = {
   },
 };
 
-const CardChartDashBoardPaymentComponent = () => {
+const CardChartDashBoardCostComponent = () => {
   const [dashboard, setDashboard] = useState<DashboardPaymentMonthData[]>();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const getDashboard = async () => {
     try {
-      const response = await Dashboard.getDashboardPaymnentMonth(
+      const response = await Dashboard.getDashboardCostMonth(
         startDate?.toISOString(),
         endDate?.toISOString()
       );
@@ -73,9 +73,9 @@ const CardChartDashBoardPaymentComponent = () => {
     labels,
     datasets: [
       {
-        label: "Tiền thu",
+        label: "Tiền chi",
         data: dashboard?.map((item) => item.countTotal),
-        backgroundColor: "green",
+        backgroundColor: "red",
         stack: "Stack 0",
       },
     ],
@@ -108,7 +108,7 @@ const CardChartDashBoardPaymentComponent = () => {
             </div>
             <div>
               <div className="flex items-center font-bold text-lg uppercase">
-                Thống kế thu
+                Thống kế chi
               </div>
               <div className="flex justify-end">
                 <RangePicker picker="month" onChange={handleDateChange}/>
@@ -124,4 +124,4 @@ const CardChartDashBoardPaymentComponent = () => {
   );
 };
 
-export default CardChartDashBoardPaymentComponent;
+export default CardChartDashBoardCostComponent;

@@ -10,6 +10,7 @@ import customToast from "../../../utils/CustomToast";
 import { ErrorIcon } from "../../../components/toast/ToastIcon";
 import CardDashBoardPaymentComponent from "../../../components/card/CardDashboardPayment";
 import CardChartDashBoardPaymentComponent from "../../../components/card/CardChartPayment";
+import CardChartDashBoardCostComponent from "../../../components/card/CardChartCost";
 
 const DashboardCustomerPage = () => {
   const [dateStart, setDateStart] = useState<Date | null>(null);
@@ -88,7 +89,12 @@ const DashboardCustomerPage = () => {
         <div className="mt-5">
           <div className="grid grid-cols-3 gap-10">
             <div className="grid col-span-2">
-              <CardChartDashBoardPaymentComponent/>
+              <div className="mb-2">
+                  <CardChartDashBoardPaymentComponent/>
+              </div>
+              <div>
+                  <CardChartDashBoardCostComponent/>
+              </div>
             </div>
             <div className="grid col-span-1">
               <CardDashBoardPaymentComponent

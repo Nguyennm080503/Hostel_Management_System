@@ -1,10 +1,17 @@
 import { HostelData } from "../../models/Hostel_models";
 import {
+  CalendarCog,
   CircleDollarSign,
+  Eye,
   Home,
   MapPin,
+  NotebookPen,
+  Pen,
+  Receipt,
+  Settings,
   SquarePen,
   Trash,
+  Trash2,
   Wrench,
 } from "lucide-react";
 import { hostelstatus } from "../../constants/status/hostelStatus";
@@ -31,6 +38,14 @@ import CreateHiringComponent from "./HiringHostelCreateCard";
 import CreateBillHirringComponent from "./CreateBillHirring";
 import { HiringInformationData } from "../../models/Hiring_models";
 import { MoneyFormat } from "../../utils/formatMoney";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import CardPaymentServiceComponent from "./PaymentServiceCard";
+import { CostServiceMonthData } from "../../models/Dashboard_models";
 
 interface DataProps {
   data: HostelData | undefined;
@@ -38,6 +53,7 @@ interface DataProps {
   emptyRoom: number;
   hiring?: HiringInformationData | undefined;
   onCallback: () => void;
+  costService: CostServiceMonthData[]
 }
 const HostelDetailCardComponent = ({
   data,
@@ -45,8 +61,10 @@ const HostelDetailCardComponent = ({
   emptyRoom,
   hiring,
   onCallback,
+  costService
 }: DataProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogServiceOpen, setIsDialogServiceOpen] = useState(false);
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
   const [isDialogUpdateOpen, setIsDialogUpdateOpen] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
@@ -108,7 +126,7 @@ const HostelDetailCardComponent = ({
                         title={status.name}
                         bgColor={status.color}
                       />
-                    )
+                    ),
                 )}
               </div>
             </div>
@@ -158,173 +176,232 @@ const HostelDetailCardComponent = ({
           </div>
           <div className="grid col-span-1">
             <div className="flex justify-end">
-              <div className="grid grid-rows-3 gap-2">
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="bg-blue-500 hover:bg-blue-300">
-                      Xem dịch vụ nhà
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                    <DialogHeader>
-                      <DialogTitle>
-                        <div className="uppercase font-bold flex items-center">
-                          <span className="mr-2">
-                            <Wrench />
-                          </span>
-                          Danh sách dịch vụ
-                        </div>
-                      </DialogTitle>
-                      <DialogDescription>
-                        <TableServiceHostelComponent
-                          hostelId={data?.hostelID}
-                          isLoad={isCreate}
-                          onLoadedServiceIds={setSelectedServiceIds}
-                        />
-                        <ServiceHostelCardComponent
-                          hostelId={data?.hostelID}
-                          selectedServiceIds={selectedServiceIds}
-                          onUpdateSelected={setSelectedServiceIds}
-                          onCallback={() => setIsCreate((prep) => !prep)}
-                        />
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-                {data?.hostelType === 2 && (
-                  <Dialog
-                    open={isDialogCreateOpen}
-                    onOpenChange={setIsDialogCreateOpen}
-                  >
-                    <DialogTrigger asChild>
-                      {data?.status !== "Hiring" ? (
-                        <Button className="bg-blue-900 hover:bg-blue-300">
-                          Tạo thời gian thuê
-                        </Button>
-                      ) : (
-                        <Button className="bg-blue-900 hover:bg-blue-300">
-                          Tạo phiếu thanh toán
-                        </Button>
-                      )}
-                    </DialogTrigger>
-                    <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                      <DialogHeader>
-                        <DialogTitle>
-                          {data?.status !== "Hiring" ? (
-                            <div className="uppercase font-bold flex items-center">
-                              <span className="mr-2">
-                                <SquarePen />
-                              </span>
-                              Tạo yêu cầu thuê
-                            </div>
-                          ) : (
-                            <div className="uppercase font-bold flex items-center">
-                              <span className="mr-2">
-                                <SquarePen />
-                              </span>
-                              Tạo phiếu thanh toán
-                            </div>
-                          )}
-                        </DialogTitle>
-                        <DialogDescription>
-                          {data?.status !== "Hiring" ? (
-                            <CreateHiringComponent
-                              hostelId={data?.hostelID}
-                              hostelFee={data?.hostelPrice}
-                              roomId={0}
-                              onCallBack={onCallback}
-                              hiringType={2}
-                            />
-                          ) : (
-                            <CreateBillHirringComponent
-                              services={hiring?.serviceRooms || []}
-                              hostel={data}
-                              hiringId={
-                                hiring?.hiringInformation.hiringRoomHostelID ||
-                                0
-                              }
-                              onCallBack={onCallback}
-                              hostelName={data.hostelName}
-                              type={2}
-                            />
-                          )}
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
-                )}
-
-                <Dialog
-                  open={isDialogUpdateOpen}
-                  onOpenChange={setIsDialogUpdateOpen}
-                >
-                  <DialogTrigger asChild>
-                    <Button className="bg-green-500 hover:bg-green-300">
-                      Thay đổi thông tin nhà
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                    <DialogHeader>
-                      <DialogTitle>
-                        <div className="uppercase font-bold flex items-center">
-                          <span className="mr-2">
-                            <SquarePen />
-                          </span>
-                          Thay đổi thông tin
-                        </div>
-                      </DialogTitle>
-                      <DialogDescription>
-                        <UpdateHostelComponent
-                          hostel={data}
-                          onCallBack={onCallback}
-                        />
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-
-                <Dialog
-                  open={isDialogDeleteOpen}
-                  onOpenChange={setIsDialogDeleteOpen}
-                >
-                  <DialogTrigger asChild>
-                    <Button className="bg-red-500 hover:bg-red-300">
-                      Xóa nhà
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
-                    <DialogHeader>
-                      <DialogTitle>
-                        <div className="uppercase font-bold flex items-center">
-                          <span className="mr-2">
-                            <Trash />
-                          </span>
-                          Bạn có chắc muốn xóa nhà này ?
-                        </div>
-                      </DialogTitle>
-                      <DialogDescription>
-                        <div>
-                          Thao tác này sẽ không được hoàn tác. Bạn có muốn xóa
-                          không ?
-                        </div>
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button
-                        className="bg-red-500 hover:bg-red-300"
-                        onClick={() => deleteHostel(data?.hostelID)}
+              <div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Settings className="cursor-pointer" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                      <Dialog
+                        open={isDialogOpen}
+                        onOpenChange={setIsDialogOpen}
                       >
-                        Xóa
-                      </Button>
-                      <Button
-                        className="bg-blue-500 hover:bg-blue-300"
-                        onClick={() => setIsDialogDeleteOpen(false)}
+                        <DialogTrigger asChild>
+                          <div className="flex m-3 cursor-pointer">
+                            <Eye />
+                            <p className="flex items-center ml-2">
+                              Xem dịch vụ nhà
+                            </p>
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                          <DialogHeader>
+                            <DialogTitle>
+                              <div className="uppercase font-bold flex items-center">
+                                <span className="mr-2">
+                                  <Wrench />
+                                </span>
+                                Danh sách dịch vụ
+                              </div>
+                            </DialogTitle>
+                            <DialogDescription>
+                              <TableServiceHostelComponent
+                                hostelId={data?.hostelID}
+                                isLoad={isCreate}
+                                onLoadedServiceIds={setSelectedServiceIds}
+                              />
+                              <ServiceHostelCardComponent
+                                hostelId={data?.hostelID}
+                                selectedServiceIds={selectedServiceIds}
+                                onUpdateSelected={setSelectedServiceIds}
+                                onCallback={() => setIsCreate((prep) => !prep)}
+                              />
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Dialog
+                        open={isDialogServiceOpen}
+                        onOpenChange={setIsDialogServiceOpen}
                       >
-                        Hủy
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                        <DialogTrigger asChild>
+                          <div className="flex m-3 cursor-pointer">
+                            <Receipt />
+                            <p className="flex items-center ml-2">
+                              Xem tiền dịch vụ dự kiến
+                            </p>
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                          <DialogHeader>
+                            <DialogTitle>
+                              <div className="uppercase font-bold flex items-center">
+                                <span className="mr-2">
+                                  <Wrench />
+                                </span>
+                                Danh sách các tháng phải trả dịch vụ dự kiến
+                              </div>
+                            </DialogTitle>
+                            <DialogDescription>
+                              <CardPaymentServiceComponent costService={costService}/>
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+                    </DropdownMenuItem>
+                    {data?.hostelType === 2 && (
+                      <DropdownMenuItem asChild>
+                        <Dialog
+                          open={isDialogCreateOpen}
+                          onOpenChange={setIsDialogCreateOpen}
+                        >
+                          <DialogTrigger asChild>
+                            {data?.status !== "Hiring" ? (
+                              <div className="flex m-3 cursor-pointer">
+                                <CalendarCog />
+                                <p className="flex items-center ml-2">
+                                  Tạo thời gian thuê
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="flex m-3 cursor-pointer">
+                                <NotebookPen />
+                                <p className="flex items-center ml-2">
+                                  Tạo phiếu thanh toán
+                                </p>
+                              </div>
+                            )}
+                          </DialogTrigger>
+                          <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                            <DialogHeader>
+                              <DialogTitle>
+                                {data?.status !== "Hiring" ? (
+                                  <div className="uppercase font-bold flex items-center">
+                                    <span className="mr-2">
+                                      <SquarePen />
+                                    </span>
+                                    Tạo yêu cầu thuê
+                                  </div>
+                                ) : (
+                                  <div className="uppercase font-bold flex items-center">
+                                    <span className="mr-2">
+                                      <SquarePen />
+                                    </span>
+                                    Tạo phiếu thanh toán
+                                  </div>
+                                )}
+                              </DialogTitle>
+                              <DialogDescription>
+                                {data?.status !== "Hiring" ? (
+                                  <CreateHiringComponent
+                                    hostelId={data?.hostelID}
+                                    hostelFee={data?.hostelPrice}
+                                    roomId={0}
+                                    onCallBack={onCallback}
+                                    hiringType={2}
+                                  />
+                                ) : (
+                                  <CreateBillHirringComponent
+                                    services={hiring?.serviceRooms || []}
+                                    hostel={data}
+                                    hiringId={
+                                      hiring?.hiringInformation
+                                        .hiringRoomHostelID || 0
+                                    }
+                                    onCallBack={onCallback}
+                                    hostelName={data.hostelName}
+                                    type={2}
+                                  />
+                                )}
+                              </DialogDescription>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem asChild>
+                      <Dialog
+                        open={isDialogUpdateOpen}
+                        onOpenChange={setIsDialogUpdateOpen}
+                      >
+                        <DialogTrigger asChild>
+                          <div className="flex m-3 cursor-pointer">
+                            <Pen />
+                            <p className="flex items-center ml-2">
+                              Thay đổi thông tin nhà
+                            </p>
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                          <DialogHeader>
+                            <DialogTitle>
+                              <div className="uppercase font-bold flex items-center">
+                                <span className="mr-2">
+                                  <SquarePen />
+                                </span>
+                                Thay đổi thông tin
+                              </div>
+                            </DialogTitle>
+                            <DialogDescription>
+                              <UpdateHostelComponent
+                                hostel={data}
+                                onCallBack={onCallback}
+                              />
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Dialog
+                        open={isDialogDeleteOpen}
+                        onOpenChange={setIsDialogDeleteOpen}
+                      >
+                        <DialogTrigger asChild>
+                          <div className="flex text-red-600 m-3 cursor-pointer">
+                            <Trash2 />
+                            <p className="flex items-center ml-2">Xóa nhà</p>
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="lg:w-[900px] md:w-[600px] sm:w-[400px]">
+                          <DialogHeader>
+                            <DialogTitle>
+                              <div className="uppercase font-bold flex items-center">
+                                <span className="mr-2">
+                                  <Trash />
+                                </span>
+                                Bạn có chắc muốn xóa nhà này ?
+                              </div>
+                            </DialogTitle>
+                            <DialogDescription>
+                              <div>
+                                Thao tác này sẽ không được hoàn tác. Bạn có muốn
+                                xóa không ?
+                              </div>
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <Button
+                              className="bg-red-500 hover:bg-red-300"
+                              onClick={() => deleteHostel(data?.hostelID)}
+                            >
+                              Xóa
+                            </Button>
+                            <Button
+                              className="bg-blue-500 hover:bg-blue-300"
+                              onClick={() => setIsDialogDeleteOpen(false)}
+                            >
+                              Hủy
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>

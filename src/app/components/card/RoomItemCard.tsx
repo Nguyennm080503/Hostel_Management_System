@@ -28,7 +28,7 @@ const RoomItemCardComponent = ({ data }: DataProps) => {
             <DoorClosed className="w-40 h-40" />
             <div className="absolute bottom-0 left-1/2">
               {roomstatus.map(
-                (status) =>
+                (status : any) =>
                   status.value === data.status && (
                     <StatusComponent
                       key={status.name}

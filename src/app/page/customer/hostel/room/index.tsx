@@ -33,12 +33,15 @@ import HiringHostel from "../../../../api/hiring/HiringHostel";
 import HiringInformationCardComponent from "../../../../components/card/HiringInformationCard";
 import MemberItemCardComponent from "../../../../components/card/MemberItemCard";
 import TableRoomComponent from "../../../../components/table/RoomTable";
+import Dashboard from "../../../../api/dashboard/Dashboard";
+import { CostServiceMonthData } from "../../../../models/Dashboard_models";
 
 const RoomCustomerPage = () => {
   const [roomsList, setRoomsList] = useState<RoomData[]>([]);
   const [hiring, setHiring] = useState<HiringInformationData>();
   const [hostel, setHostel] = useState<HostelData>();
   const [members, setMember] = useState<MemberData[]>([]);
+  const [serivce_cost, set_cost] = useState<CostServiceMonthData[]>([]);
   const [currentMemberItems, setCurrentMemberItems] = useState<MemberData[]>(
     []
   );
@@ -57,6 +60,7 @@ const RoomCustomerPage = () => {
   };
   useEffect(() => {
     getRooms();
+    getCostService()
   }, [isChange]);
 
   const getRooms = async () => {
@@ -71,6 +75,27 @@ const RoomCustomerPage = () => {
         setHostel(response.hostel);
         setHiring(response2);
         setMember(response2.members);
+      }
+    } catch (error) {
+      customToast({
+        icon: <WarningIcon />,
+        description: "Đã xảy ra lỗi, không thể lấy danh sách",
+        duration: 3000,
+      });
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
+  const getCostService = async () => {
+    setIsLoading(true);
+    try {
+      if (hostelId) {
+        const response = await Dashboard.getCostServie(Number(hostelId));
+        
+        set_cost(response);
       }
     } catch (error) {
       customToast({
@@ -131,6 +156,7 @@ const RoomCustomerPage = () => {
           }
           hiring={hiring}
           onCallback={onCallBackRoom}
+          costService={serivce_cost}
         />
         {hostel?.hostelType !== 2 ? (
           <>

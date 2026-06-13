@@ -16,7 +16,17 @@ export interface DashboardPaymentData{
 
 export interface DashboardPaymentMonthData{
     month : number
-    countTotalSpending :  number
-    countTotalReceive : number
+    countTotal : number
     year : number
+}
+
+export interface ServiceAmountData{
+    servicename : string
+    amount_total : number
+}
+
+export interface CostServiceMonthData{
+    month_year : string
+    total : number
+    service : ServiceAmountData[]
 }
